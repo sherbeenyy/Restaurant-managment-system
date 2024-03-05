@@ -36,8 +36,25 @@ namespace Restaurant_managment_system
          ~Employee() { } //clean up when the object is destroyed;
 
         public int Age
-        {
-            get { return _age; }
-        }  
+        { get { return _age; } } 
+        public string Address
+        { get { return _address; } }
+        public string PhoneNumber
+        { get { return _phoneNumber; } }
+        public float WorkingHours
+        { get { return _workingHours; } }
+        public float Salary
+        { get { return _salary; } }
+        public int Shift
+        { get { return _shift; } }
+        public string Role
+        { get { return _role; } }
+        public string Name
+        { get { return _name; } }
+        public int Id
+        { get { return _id;} }
+        public int TotalEmployees
+        { get { return _totalEmployees; } }
+        
     }    
 }

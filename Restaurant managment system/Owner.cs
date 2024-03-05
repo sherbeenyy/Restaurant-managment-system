@@ -9,34 +9,10 @@ namespace Restaurant_managment_system
 {
 
 
-    internal class Owner
+    internal class Owner:Manager  //inhert from the manager class ..means that it takes all its functions and 
+                                  // we can add unique functions only the onwer will have like fire the manager 
     {
-        List<Employee> employees = new List<Employee>() ; //data strcute like the array but easier to add and delete ;
 
-        public bool checkIfValid(Employee e)
-        {
-
-            // INCOMPLETE !!  we should check for other parameters 
-            if (e.Age < 18) { 
-            Console.WriteLine("can't hire people who is less than 18 years old ");
-            return false;
-            }
-
-            return true;
-        }
-
-        public void hire(Employee e)
-        {
-            if (checkIfValid(e))
-            {
-                employees.Add(e);
-                Console.WriteLine("hired Sucssefully");
-            }
-            else
-            {
-                Console.WriteLine("not hired!");
-            }
-        }
 
     }
 }
