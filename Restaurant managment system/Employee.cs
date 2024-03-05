@@ -16,11 +16,11 @@ namespace Restaurant_managment_system
         private string _address;
         private string _phoneNumber;
         private float _workingHours;
-        private float _salary;
+        private float _salary = 0;
         private int _shift; // 0 representing night and 1 representing morning ;
         static private int _totalEmployees = 0;
 
-       public Employee(int id, string role, string name, int age, string address, string phoneNumber, float workingHours, float salary, int shift)
+       public Employee(int id, string role, string name, int age, string address, string phoneNumber, float workingHours, int shift)
         {
             _id = id;
             _role = role;
@@ -29,22 +29,14 @@ namespace Restaurant_managment_system
             _address = address;
             _phoneNumber = phoneNumber;
             _workingHours = workingHours;
-            _salary = workingHours*12.2f;
+            _salary = workingHours*12.2f*30;
             _shift = shift;
             _totalEmployees++;
         }
+         ~Employee() { } //clean up when the object is destroyed;
 
         public int Age
         {
-            set { if (Age >= 18)
-                {
-                    Age = value;
-
-                }else
-                {
-                    Age = -1; //invalid age so we can detect and fire him ;
-                }
-            }
             get { return _age; }
         }  
     }    

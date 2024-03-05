@@ -1,7 +1,13 @@
-﻿class Program
+﻿using Restaurant_managment_system;
+
+class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine("entry point");
+
+        Employee ahmed = new Employee(1,"manager","ahmed",20,"cairo","01111111",12,0);
+        Owner Mohamed = new Owner();
+        Console.WriteLine($"{ ahmed.Age}");
+        Mohamed.hire(ahmed);
     }
 }

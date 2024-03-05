@@ -11,14 +11,16 @@ namespace Restaurant_managment_system
 
     internal class Owner
     {
-        List<Employee> employees; //data strcute like the array but easier to add and delete ;
+        List<Employee> employees = new List<Employee>() ; //data strcute like the array but easier to add and delete ;
 
         public bool checkIfValid(Employee e)
         {
 
             // INCOMPLETE !!  we should check for other parameters 
-            if (e.Age == -1)
-            { return false; }
+            if (e.Age < 18) { 
+            Console.WriteLine("can't hire people who is less than 18 years old ");
+            return false;
+            }
 
             return true;
         }
@@ -28,6 +30,11 @@ namespace Restaurant_managment_system
             if (checkIfValid(e))
             {
                 employees.Add(e);
+                Console.WriteLine("hired Sucssefully");
+            }
+            else
+            {
+                Console.WriteLine("not hired!");
             }
         }
 
