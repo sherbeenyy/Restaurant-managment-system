@@ -19,7 +19,11 @@ namespace Restaurant_managment_system
                 Console.WriteLine("can't hire people who is less than 18 years old ");
                 return false;
             }
-
+            // not working IDK WHY ????????
+            if ( e.Role != "manager" || e.Role != "chef" || e.Role != "delivery" || e.Role != "waiter" || e.Role != "cashier") {
+                Console.WriteLine("Invalid role");
+                return false;
+            }
             return true;
         }
         public void hire(Employee e)
