@@ -9,6 +9,23 @@ namespace Restaurant_managment_system
     internal class Manager
     {
         List<Employee> employees = new List<Employee>(); //data strcuter like the array but easier to add and delete ;
+        List<string> allowedRoles = new List<string>
+        {
+            "manager","chef","delivery", "waiter","cashier"
+        };
+
+        
+        //searching in the list if the role exist 
+        private bool foundInAllowedRoles (Employee e)
+        {
+            for (int i = 0; i < allowedRoles.Count; i++)
+            {
+                if (allowedRoles[i] == e.Role)
+                    return true;
+
+            }
+                return false;
+        }
 
         public bool checkIfValid(Employee e)
         {
@@ -19,10 +36,10 @@ namespace Restaurant_managment_system
                 Console.WriteLine("can't hire people who is less than 18 years old ");
                 return false;
             }
-            // not working IDK WHY ????????
-            if ( e.Role != "manager" || e.Role != "chef" || e.Role != "delivery" || e.Role != "waiter" || e.Role != "cashier") {
-                Console.WriteLine("Invalid role");
-                return false;
+            if (!foundInAllowedRoles (e))
+            {
+                Console.WriteLine("invalid role");
+                return false ;
             }
             return true;
         }
