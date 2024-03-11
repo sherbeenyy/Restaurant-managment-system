@@ -14,6 +14,6 @@ class Program
         Mohamed.printEmployees();
         Console.WriteLine(ahmed.Salary);
         ahmed.askForRaise();
-        Console.WriteLine(ahmed.Salary);
+        ahmed.displayInfo();
     }
 }

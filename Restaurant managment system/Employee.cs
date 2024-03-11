@@ -67,6 +67,18 @@ namespace Restaurant_managment_system
             }
             return false;
         }
+        public void displayInfo()
+        {
+            Console.WriteLine("Employee ID: " + _id);
+            Console.WriteLine("Employee Role: " + _role);
+            Console.WriteLine("Employee Name: " + _name);
+            Console.WriteLine("Employee Age: " + _age);
+            Console.WriteLine("Employee Address: " + _address);
+            Console.WriteLine("Employee Phone Number: " + _phoneNumber);
+            Console.WriteLine("Employee Working Hours: " + _workingHours);
+            Console.WriteLine("Employee Salary: " + _salary);
+            Console.WriteLine("Employee Shift: " + _shift);
+        }
 
     }
 
