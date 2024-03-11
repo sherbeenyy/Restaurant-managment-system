@@ -14,9 +14,9 @@ namespace Restaurant_managment_system
             "manager","chef","delivery", "waiter","cashier"
         };
 
-        
+
         //searching in the list if the role exist 
-        private bool foundInAllowedRoles (Employee e)
+        private bool foundInAllowedRoles(Employee e)
         {
             for (int i = 0; i < allowedRoles.Count; i++)
             {
@@ -24,7 +24,7 @@ namespace Restaurant_managment_system
                     return true;
 
             }
-                return false;
+            return false;
         }
 
         public bool checkIfValid(Employee e)
@@ -36,10 +36,10 @@ namespace Restaurant_managment_system
                 Console.WriteLine("can't hire people who is less than 18 years old ");
                 return false;
             }
-            if (!foundInAllowedRoles (e))
+            if (!foundInAllowedRoles(e))
             {
                 Console.WriteLine("invalid role");
-                return false ;
+                return false;
             }
             return true;
         }
@@ -57,6 +57,20 @@ namespace Restaurant_managment_system
         }
 
 
+        public void printEmployees()
+        {
+            //print the employees
+            for (int i = 0; i < employees.Count; i++)
+            {
+                Console.WriteLine(employees[i].Name);
+            }
+        }
 
+        //delete employee
+        public void fire(Employee e)
+        {
+            employees.Remove(e);
+            Console.WriteLine("fired Sucssefully");
+        }
     }
 }
