@@ -20,7 +20,7 @@ namespace Restaurant_managment_system
         private int _shift; // 0 representing night and 1 representing morning
         static private int _totalEmployees = 0;
 
-       public Employee(int id, string role, string name, int age, string address, string phoneNumber, float workingHours, int shift)
+        public Employee(int id, string role, string name, int age, string address, string phoneNumber, float workingHours, int shift)
         {
             _id = id;
             _role = role;
@@ -29,14 +29,14 @@ namespace Restaurant_managment_system
             _address = address;
             _phoneNumber = phoneNumber;
             _workingHours = workingHours;
-            _salary = workingHours*12.2f*30;
+            _salary = workingHours * 12.2f * 30;
             _shift = shift;
             _totalEmployees++;
         }
-         ~Employee() { } //clean up when the object is destroyed;
+        ~Employee() { } //clean up when the object is destroyed;
 
         public int Age
-        { get { return _age; } } 
+        { get { return _age; } }
         public string Address
         { get { return _address; } }
         public string PhoneNumber
@@ -52,9 +52,22 @@ namespace Restaurant_managment_system
         public string Name
         { get { return _name; } }
         public int Id
-        { get { return _id;} }
+        { get { return _id; } }
         public int TotalEmployees
         { get { return _totalEmployees; } }
-        
-    }    
+
+
+
+        public bool askForRaise()
+        {
+            if (_workingHours > 8)
+            {
+                _salary += 1000;
+                return true;
+            }
+            return false;
+        }
+
+    }
+
 }

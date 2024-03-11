@@ -26,7 +26,6 @@ namespace Restaurant_managment_system
             }
             return false;
         }
-
         public bool checkIfValid(Employee e)
         {
 
@@ -55,8 +54,6 @@ namespace Restaurant_managment_system
                 Console.WriteLine("not hired!");
             }
         }
-
-
         public void printEmployees()
         {
             //print the employees
@@ -65,7 +62,6 @@ namespace Restaurant_managment_system
                 Console.WriteLine(employees[i].Name);
             }
         }
-
         //delete employee
         public void fire(Employee e)
         {
