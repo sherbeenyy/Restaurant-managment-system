@@ -6,15 +6,25 @@ using System.Threading.Tasks;
 
 namespace Restaurant_managment_system
 {
-    internal class Manager
+    internal class Manager : Employee
     {
-        List<Employee> employees = new List<Employee>(); //data strcuter like the array but easier to add and delete ;
+        private float _expYears;
+        public float ExpYears
+        {
+            get { return _expYears; }
+            set { _expYears = value; }
+        }
+        public Manager(int id, string role, string name, int age, string address, string phoneNumber, float workingHours, int shift, float expYears)
+        : base(id, role, name, age, address, phoneNumber, workingHours, shift)
+        {
+            _expYears = expYears;
+        }
+
+        protected List<Employee> employees = new List<Employee>(); //data strcuter like the array but easier to add and delete ;
         List<string> allowedRoles = new List<string>
         {
-            "manager","chef","delivery", "waiter","cashier"
+            "chef","delivery", "waiter","cashier"
         };
-
-
         //searching in the list if the role exist 
         private bool foundInAllowedRoles(Employee e)
         {

@@ -36,23 +36,50 @@ namespace Restaurant_managment_system
         ~Employee() { } //clean up when the object is destroyed;
 
         public int Age
-        { get { return _age; } }
+        {
+            get { return _age; }
+            set { _age = value; }
+        }
         public string Address
-        { get { return _address; } }
+        {
+            get { return _address; }
+            set { _address = value; }
+        }
         public string PhoneNumber
-        { get { return _phoneNumber; } }
+        {
+            get { return _phoneNumber; }
+            set { _phoneNumber = value; }
+        }
         public float WorkingHours
-        { get { return _workingHours; } }
+        {
+            get { return _workingHours; }
+            set { _workingHours = value; }
+        }
         public float Salary
-        { get { return _salary; } }
+        {
+            get { return _salary; }
+            set { _salary = value; }
+        }
         public int Shift
-        { get { return _shift; } }
+        {
+            get { return _shift; }
+            set { _shift = value; }
+        }
         public string Role
-        { get { return _role; } }
+        {
+            get { return _role; }
+            set { _role = value; }
+        }
         public string Name
-        { get { return _name; } }
+        {
+            get { return _name; }
+            set { _name = value; }
+        }
         public int Id
-        { get { return _id; } }
+        {
+            get { return _id; }
+            set { _id = value; }
+        }
         public int TotalEmployees
         { get { return _totalEmployees; } }
 
