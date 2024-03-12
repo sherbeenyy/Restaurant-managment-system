@@ -14,8 +14,9 @@ namespace Restaurant_managment_system
         }
         List<Manager> managers = new List<Manager>();
 
-        public void promoteToManager(Employee e)
+        public Manager promoteToManager(Employee e)
         {
+            e.Role = "manager";
             Manager newManager = new Manager(e.Id, e.Role, e.Name, e.Age, e.Address, e.PhoneNumber, e.WorkingHours, e.Shift, 0);
             newManager.Name = e.Name;
             newManager.Age = e.Age;
@@ -24,6 +25,7 @@ namespace Restaurant_managment_system
 
             managers.Add(newManager);
             employees.Remove(e);
+            return newManager;
 
         }
         public void printManagers()

@@ -1,4 +1,5 @@
-﻿using Restaurant_managment_system;
+﻿using System.Security.Cryptography;
+using Restaurant_managment_system;
 
 class Program
 {
@@ -13,10 +14,11 @@ class Program
         Mohamed.hire(ahmed);
         Mohamed.hire(ashraf);
         Mohamed.hire(osama);
-        Mohamed.promoteToManager(ashraf);
+        Manager ashrafm = Mohamed.promoteToManager(ashraf);
         Console.WriteLine("Managers: ");
         Mohamed.printManagers();
         Console.WriteLine("Employees: ");
         Mohamed.printEmployees();
+        ashrafm.hire(ahmed);
     }
 }
