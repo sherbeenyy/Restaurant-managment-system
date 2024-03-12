@@ -34,18 +34,19 @@ namespace Restaurant_managment_system
             _totalEmployees++;
         }
         ~Employee() { } //clean up when the object is destroyed;
-
         public int Age
         {
             set; get;
         }
         public string Address
         {
-            set; get;
+            set { _address = value; }
+            get { return _address; }
         }
         public string PhoneNumber
         {
-            set; get;
+            set { _phoneNumber = value; }
+            get { return _phoneNumber; }
         }
         public float WorkingHours
         {
@@ -61,11 +62,13 @@ namespace Restaurant_managment_system
         }
         public string Role
         {
-            set; get;
+            set { _role = value; }
+            get { return _role; }
         }
         public string Name
         {
-            set; get;
+            set { _name = value; }
+            get { return _name; }
         }
         public int Id
         {
