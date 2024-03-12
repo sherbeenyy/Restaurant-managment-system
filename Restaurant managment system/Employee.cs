@@ -37,48 +37,39 @@ namespace Restaurant_managment_system
 
         public int Age
         {
-            get { return _age; }
-            set { _age = value; }
+            set; get;
         }
         public string Address
         {
-            get { return _address; }
-            set { _address = value; }
+            set; get;
         }
         public string PhoneNumber
         {
-            get { return _phoneNumber; }
-            set { _phoneNumber = value; }
+            set; get;
         }
         public float WorkingHours
         {
-            get { return _workingHours; }
-            set { _workingHours = value; }
+            set; get;
         }
         public float Salary
         {
-            get { return _salary; }
-            set { _salary = value; }
+            set; get;
         }
         public int Shift
         {
-            get { return _shift; }
-            set { _shift = value; }
+            set; get;
         }
         public string Role
         {
-            get { return _role; }
-            set { _role = value; }
+            set; get;
         }
         public string Name
         {
-            get { return _name; }
-            set { _name = value; }
+            set; get;
         }
         public int Id
         {
-            get { return _id; }
-            set { _id = value; }
+            set; get;
         }
         public int TotalEmployees
         { get { return _totalEmployees; } }
