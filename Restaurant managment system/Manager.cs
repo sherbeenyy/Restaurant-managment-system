@@ -78,5 +78,12 @@ namespace Restaurant_managment_system
             employees.Remove(e);
             Console.WriteLine("fired Sucssefully");
         }
+
+        //add employee ..create new employee
+        public void addEmployee(int id, string role, string name, int age, string address, string phoneNumber, float workingHours, int shift)
+        {
+            Employee e = new Employee(id, role, name, age, address, phoneNumber, workingHours, shift);
+            hire(e);
+        }
     }
 }

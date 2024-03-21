@@ -1,4 +1,6 @@
-﻿using System.Security.Cryptography;
+﻿using System.Globalization;
+using System.Security.Cryptography;
+using System.Xml.Serialization;
 using Restaurant_managment_system;
 
 class Program
@@ -7,7 +9,7 @@ class Program
     {
 
         // Employee calss testing 
-        Employee ahmed = new Employee(1, "chef", "ahmed", 20, "cairo", "01111111", 12, 0);
+      /*   Employee ahmed = new Employee(1, "chef", "ahmed", 20, "cairo", "01111111", 12, 0);
         Employee ashraf = new Employee(1, "chef", "ashraf", 20, "cairo", "01111111", 12, 0);
         Employee osama = new Employee(1, "cashier", "osama", 20, "cairo", "01111111", 12, 0);
 
@@ -24,18 +26,62 @@ class Program
         Mohamed.printManagers();
         Console.WriteLine("Employees: ");
         Mohamed.printEmployees();
-        ashrafm.hire(ahmed);
+        ashrafm.hire(ahmed); */
 
 
         // Menu class testing 
 
+
         Console.WriteLine("\n------------Menu testing ---------------\n");
 
-        Menu item1 = new Menu();
-        Menu item2 = new Menu();
-        Menu item3 = new Menu();
-        Console.WriteLine("1. Add new item.\n2. Remove item. \n3. Edit item.\n4. View item details.\n");
-        Console.Write(">>");
-        int choice = int.Parse(Console.ReadLine());
+             Menu menu = new Menu();
+             
+             while (true)
+             {
+                 menu.MenuMangemnet();
+             }
+
+    
+    
+
+
+
+
+
+//Anas Customer part:
+        /*Customer customer = new Customer("", "", "");
+        customer.ReadInput();
+         customer.DisplayCustomer();*/
+
+
+//Anas ordering part
+/*
+   Ordering menu = new();
+
+        while (true)
+        {
+            menu.DisplayMenu();
+            int selection = menu.GetUserSelection();
+
+            if (selection > 0 && selection <= menuItems.Count)
+            {
+                switch (selection)
+                {
+                    case 1:
+                        // Place Order
+                        break;
+                    case 2:
+                        // View Order History
+                        break;
+                    case 3:
+                        // Exit
+                        return;
+                    default:
+                        break;
+                }
+            }
+        }
+*/
     }
+    
 }
