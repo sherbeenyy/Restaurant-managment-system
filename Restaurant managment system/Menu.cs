@@ -216,6 +216,16 @@ public class Menu
                 }
    }
 
+    public void showCategory(string c)
+    {
+        foreach (MenuItem item in menuItems)
+        {
+            if (item.FoodCategory == c)
+            {
+                Console.WriteLine($"Name: {item.FoodName}\n Description: {item.FoodDescription}\n Price: {item.FoodPrice}\n Category: {item.FoodCategory}\n Id: {item.FoodId}");
+            }
+        }
+    }
     public void ViewItems()
     {
         foreach (MenuItem item in menuItems)
