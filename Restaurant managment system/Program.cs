@@ -35,8 +35,10 @@ class Program
         Console.WriteLine("\n------------Menu testing ---------------\n");
 
         Menu menu = new Menu();
+        while (true)
+        { 
         menu.MenuMangemnet();
-        menu.showCategory("main course");
+        }
 
 
 
