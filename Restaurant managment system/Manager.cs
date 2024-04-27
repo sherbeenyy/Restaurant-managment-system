@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Restaurant_managment_system
 {
+
+
     internal class Manager : Employee
     {
         private float _expYears;
+        private bool isAuth = false;
         public float ExpYears
         {
             get { return _expYears; }
@@ -52,17 +56,31 @@ namespace Restaurant_managment_system
             }
             return true;
         }
+
+            public bool login(string username, string password)
+        {
+            if (username == "admin" && password == "admin")
+            {
+                isAuth = true;
+                return true;
+            }
+            return false;
+        }
         public void hire(Employee e)
         {
-            if (checkIfValid(e))
+            if (isAuth)
             {
-                employees.Add(e);
-                Console.WriteLine("hired Sucssefully");
-            }
-            else
-            {
-                Console.WriteLine("not hired!");
-            }
+                if (checkIfValid(e))
+                {
+                    employees.Add(e);
+                    Console.WriteLine("hired Sucssefully");
+                }
+                else
+                {
+                    Console.WriteLine("not hired!");
+                }
+            }else Console.WriteLine("you are not authorized to do this action");
+
         }
         public void printEmployees()
         {
@@ -75,15 +93,18 @@ namespace Restaurant_managment_system
         //delete employee
         public void fire(Employee e)
         {
+            if(isAuth)
+            {
             employees.Remove(e);
             Console.WriteLine("fired Sucssefully");
+            }
+            else Console.WriteLine("you are not authorized to do this action");
+            }
+
         }
 
         //add employee ..create new employee
-        public void addEmployee(int id, string role, string name, int age, string address, string phoneNumber, float workingHours, int shift)
-        {
-            Employee e = new Employee(id, role, name, age, address, phoneNumber, workingHours, shift);
-            hire(e);
-        }
+
+
     }
-}
+
