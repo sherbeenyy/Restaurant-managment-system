@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using Newtonsoft.Json;
 
     [Serializable]
 
@@ -32,10 +33,7 @@ public class MenuItem
 
 public class Menu
 {
-   
-        
- 
-    private List<MenuItem> menuItems = new List<MenuItem>(); // create a list of menu items named menuItems
+   private List<MenuItem> menuItems = new List<MenuItem>(); // create a list of menu items named menuItems
 
 // testing in the main function
     public void MenuMangemnet()
@@ -124,40 +122,6 @@ public class Menu
         // Create a new MenuItem object with the user input
 
         var newItem = new MenuItem(name, description, price, category,foodId);
-
-       
-        // input data into file and print for testing 
-
-        string path = @"C:\Users\mazen\OneDrive\Desktop\test\OOP project\Restaurant-managment-system\Restaurant managment system\files\menu.txt";
-        if (!File.Exists(path))
-        {
-            // Create a file to write to.
-            using (StreamWriter sw = File.CreateText(path))
-            {
-                sw.WriteLine($" foodID: , name: , description: , price: , category: ");
-                sw.WriteLine($"{foodId} {name} {description} {price} {category} ");
-            }
-        }
-        else
-        {
-            using (StreamWriter sw = File.AppendText(path))
-            {
-                sw.WriteLine($"{foodId} {name} {description} {price} {category} ");
-            }
-        }
-
-        {
-            // Open the file to read from.
-            using (StreamReader sr = File.OpenText(path))
-            {
-                string s;
-                while ((s = sr.ReadLine()) != null)
-                {
-                    Console.WriteLine(s);
-                }
-            }
-        }
-
 
         // Add the new item to the list
 
@@ -300,39 +264,23 @@ public class Menu
 
     public void LoadItemsFromFile()
     {
-        string path = @"C:\Users\mazen\OneDrive\Desktop\test\OOP project\Restaurant-managment-system\Restaurant managment system\files\menu.txt";
+        string path = @"C:\Users\mazen\OneDrive\Desktop\test\OOP project\Restaurant-managment-system\Restaurant managment system\files\menu.json";
+
         if (File.Exists(path))
         {
-            using (StreamReader sr = new StreamReader(path))
-            {
-                string line;
-                while ((line = sr.ReadLine()) != null)
-                {
-                    var data = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                    if (data.Length >= 5)
-                    {
-                        int id = int.Parse(data[0]);
-                        string name = data[1];
-                        string description = data[2];
-                        decimal price = decimal.Parse(data[3]);
-                        string category = data[4];
-                        MenuItem newItem = new MenuItem(name, description, price, category, id);
-                        menuItems.Add(newItem);
-                    }
-                }
-            }
+            string json = File.ReadAllText(path); // Read JSON content from the file
+            menuItems = JsonConvert.DeserializeObject<List<MenuItem>>(json) ?? new List<MenuItem>(); // Deserialize JSON to List<MenuItem>
+        }
+        else
+        {
+            menuItems = new List<MenuItem>(); // Initialize empty list if file doesn't exist
         }
     }
-public void SaveItemsToFile()
+    public void SaveItemsToFile()
     {
-        string path = @"C:\Users\mazen\OneDrive\Desktop\test\OOP project\Restaurant-managment-system\Restaurant managment system\files\menu.txt";
-        using (StreamWriter sw = new StreamWriter(path))
-        {
-            foreach (var item in menuItems)
-            {
-                sw.WriteLine($"{item.FoodId} {item.FoodName} {item.FoodDescription} {item.FoodPrice} {item.FoodCategory}");
-            }
-        }
+        string path = @"C:\Users\mazen\OneDrive\Desktop\test\OOP project\Restaurant-managment-system\Restaurant managment system\files\menu.json";
+        string json = JsonConvert.SerializeObject(menuItems, Formatting.Indented); // Serialize list to JSON
+        File.WriteAllText(path, json); // Write JSON content to the file
     }
 }
 

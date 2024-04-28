@@ -1,2 +1,0 @@
-1 burger cheese 35 food
-2 pizza flower 10 mom

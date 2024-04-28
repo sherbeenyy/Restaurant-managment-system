@@ -4,8 +4,9 @@ using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
-    public class Manager : Employee
+public class Manager : Employee
     {
         private float _expYears;
         private bool isAuth = true;
@@ -65,58 +66,66 @@ using System.Threading.Tasks;
             return false;
         }
 
-
+    // hire employee
     public void hire()
     {
         if (isAuth)
         {
-            while (true)
+            Console.Write("Enter the employee role: ");
+            string role = Console.ReadLine();
+            while (!allowedRoles.Contains(role))
             {
-                Console.Write("Enter the employee role: ");
-                string Role = Console.ReadLine();
-                if(allowedRoles.Contains(Role))
-                {
-                    break;
-                }
-                else
-                {
-                    Console.WriteLine("Invalid role, please try again.");
-                }
+                Console.WriteLine("Invalid role, please try again.");
+                role = Console.ReadLine();
             }
-            Console.Write("Enter the employee name: ");
-            string Name = Console.ReadLine();
 
+            Console.Write("Enter the employee name: ");
+            string name = Console.ReadLine();
 
             Console.Write("Enter the employee age: ");
-            int Age = Convert.ToInt32(Console.ReadLine());
+            string ageInput = Console.ReadLine();
+            if (!int.TryParse(ageInput, out int age) || age < 18)
+            {
+                Console.WriteLine("Invalid age. Must be 18 or older.");
+                return; // Exit if invalid age
+            }
 
             Console.Write("Enter the employee address: ");
-            string Address = Console.ReadLine();
+            string address = Console.ReadLine();
 
             Console.Write("Enter the employee phone number: ");
-            string PhoneNumber = Console.ReadLine();
+            string phoneNumber = Console.ReadLine();
 
             Console.Write("Enter the employee working hours: ");
-            int WorkingHours = Convert.ToInt32(Console.ReadLine());
+            if (!float.TryParse(Console.ReadLine(), out float workingHours))
+            {
+                Console.WriteLine("Invalid input for working hours.");
+                return; // Exit if invalid input
+            }
 
             Console.Write("Enter the employee shift: ");
-            int Shift = Convert.ToInt32(Console.ReadLine());
+            if (!int.TryParse(Console.ReadLine(), out int shift))
+            {
+                Console.WriteLine("Invalid input for shift.");
+                return; // Exit if invalid input
+            }
 
-
-            var newEmployee = new Employee(employees.Count + 1, Role, Name, Age, Address, PhoneNumber, WorkingHours, Shift);
-
+            Employee newEmployee = new Employee(employees.Count + 1, role, name, age, address, phoneNumber, workingHours, shift);
             employees.Add(newEmployee);
-
+            SaveItemsToFile();
             Console.WriteLine("Employee added successfully");
+        }
+        else
+        {
+            Console.WriteLine("You are not authorized to perform this action.");
+        }
+    }
 
-        }
-        else Console.WriteLine("you are not authorized to do this action");
-        }
-        
-        public void printEmployees()
+    // print employees
+    public void printEmployees()
     {
             Console.WriteLine("Employees List");
-        //print the employees
+       
         for (int i = 0; i < employees.Count; i++)
             {
                 Console.WriteLine(employees[i].Name);
@@ -124,7 +133,7 @@ using System.Threading.Tasks;
             Console.WriteLine("==================");
     }
 
-        //delete employee
+        //Remove employee
         public void fire()
         {
             if(isAuth)
@@ -139,6 +148,7 @@ using System.Threading.Tasks;
             {
                 Console.WriteLine("Item removed successfully." + item.Name);
                 employees.Remove(item);
+                SaveItemsToFile();
             }
             else
                 {
@@ -148,9 +158,26 @@ using System.Threading.Tasks;
             }
             else Console.WriteLine("you are not authorized to do this action");
         }
+    public void LoadItemsFromFile() // Load employees from JSON file
+    {
+        string path = @"C:\Users\mazen\OneDrive\Desktop\test\OOP project\Restaurant-managment-system\Restaurant managment system\files\employee.json";
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            employees = JsonConvert.DeserializeObject<List<Employee>>(json) ?? new List<Employee>(); // Deserialize json to List<Employee>, if null create new List
+        }
+    }
+
+    public void SaveItemsToFile() // Save employees to JSON file
+    {
+        string path = @"C:\Users\mazen\OneDrive\Desktop\test\OOP project\Restaurant-managment-system\Restaurant managment system\files\employee.json";
+        string json = JsonConvert.SerializeObject(employees, Formatting.Indented); // Serialize the list to JSON with indented format
+        File.WriteAllText(path, json);
+    }
 
     public void ManagerManagement()
     {
+        LoadItemsFromFile();
         bool continueRunning = true;
         while (continueRunning)
         {
