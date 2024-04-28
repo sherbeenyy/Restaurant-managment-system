@@ -12,7 +12,7 @@ class Program
 {
     static void Main(string[] args)
     {
-
+      
         // Employee calss testing 
         /*   Employee ahmed = new Employee(1, "chef", "ahmed", 20, "cairo", "01111111", 12, 0);
           Employee ashraf = new Employee(1, "chef", "ashraf", 20, "cairo", "01111111", 12, 0);
@@ -44,11 +44,14 @@ class Program
 
         Menu menu = new Menu();
         Ordering order = new();
+        Manager ahmed = new Manager(1, "manager", "ahmed", 20, "cairo", "01111111", 12, 0, 0);
+
         Console.WriteLine("Welcome to the restaurant management system\n\n");
         while (true)
         { 
         Console.WriteLine("1. change the menu items");
         Console.WriteLine("2. Place an order");
+        Console.WriteLine("3. Owner stuff");
         Console.Write(">> ");
         int Choice = int.Parse(Console.ReadLine());
             switch (Choice)
@@ -57,9 +60,10 @@ class Program
                         menu.MenuMangemnet();
                     break;
                 case 2:
+
                     break;
                 case 3:
-
+                    ahmed.ManagerManagement();
                     break;
                 default:
                     Console.WriteLine("Invalid option, please try again.\n");

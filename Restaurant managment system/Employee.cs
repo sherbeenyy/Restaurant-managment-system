@@ -5,9 +5,8 @@ using System.Runtime.Versioning;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Restaurant_managment_system
-{
-    internal class Employee
+
+    public class Employee
     {
         private int _id;
         private string _role;
@@ -103,4 +102,4 @@ namespace Restaurant_managment_system
 
     }
 
-}
+
