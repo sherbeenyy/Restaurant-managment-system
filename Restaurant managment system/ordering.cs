@@ -6,37 +6,39 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-public class Ordering : Menu
+public class Ordering 
 {
+    // variables
 
- private readonly Dictionary<int, string> menuItems = new()
+    private int _orderID;
+    private int _orderitmes;
+    private int _receipt;
+    private int _tax;
+    private int _serviceCharge;
+    private string _orderDate;
+
+
+    // constructor
+
+    public Ordering(int orderID, int orderitmes, int receipt, int tax, int serviceCharge, string orderDate)
     {
-        { 1, "Place Order" },
-        { 2, "View Order History" },
-        { 3, "Exit" }
-    };
-
-    // to display the main menu
-    public override void ViewItems()
-    { 
-        return;
+        _orderID = orderID;
+        _orderitmes = orderitmes;
+        _receipt = receipt;
+        _tax = tax;
+        _serviceCharge = serviceCharge;
+        _orderDate = orderDate;
     }
 
-    //to get the user's selection
-    public int GetUserSelection()
+    // default constructor
+
+    public Ordering()
     {
-
-        Console.Write("Please enter your selection: ");
-        var selection = Console.ReadLine();
-
-        if (int.TryParse(selection, out int selectionNumber) && menuItems.ContainsKey(selectionNumber))
-        {
-            return selectionNumber;
-        }
-        else
-        {
-            Console.WriteLine("Invalid selection. Please try again.");
-            return -1;
-        }
     }
+
+    
+
+
 }
+
+

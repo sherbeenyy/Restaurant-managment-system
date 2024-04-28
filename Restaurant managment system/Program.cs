@@ -52,6 +52,7 @@ class Program
         Console.WriteLine("1. change the menu items");
         Console.WriteLine("2. Place an order");
         Console.WriteLine("3. Owner stuff");
+        Console.WriteLine("4. Exit");
         Console.Write(">> ");
         int Choice = int.Parse(Console.ReadLine());
             switch (Choice)
@@ -60,11 +61,14 @@ class Program
                         menu.MenuMangemnet();
                     break;
                 case 2:
+                    // Place Order
 
                     break;
                 case 3:
                     ahmed.ManagerManagement();
                     break;
+                case 4:
+                    return;
                 default:
                     Console.WriteLine("Invalid option, please try again.\n");
                     break;
