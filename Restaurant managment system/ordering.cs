@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-public class Ordering
+public class Ordering : Menu
 {
 
  private readonly Dictionary<int, string> menuItems = new()
@@ -16,22 +17,15 @@ public class Ordering
     };
 
     // to display the main menu
-    public void DisplayMenu()
-    {
-        Console.Clear();
-        Console.WriteLine("Welcome to the Menu!");
-        Console.WriteLine("==================");
-
-        // to Display the menu items
-        foreach (var item in menuItems)
-        {
-            Console.WriteLine($"{item.Key}. {item.Value}");
-        }
+    public override void ViewItems()
+    { 
+        return;
     }
 
     //to get the user's selection
     public int GetUserSelection()
     {
+
         Console.Write("Please enter your selection: ");
         var selection = Console.ReadLine();
 

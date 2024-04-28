@@ -2,6 +2,11 @@
 using System.Security.Cryptography;
 using System.Xml.Serialization;
 using Restaurant_managment_system;
+using System;
+using System.IO;
+using System.Linq.Expressions;
+using System.Runtime.Serialization.Formatters.Binary;
+
 
 class Program
 {
@@ -28,22 +33,40 @@ class Program
           Mohamed.printEmployees();
           ashrafm.hire(ahmed); */
 
+        // seralization testing 
 
-        // Menu class testing 
+        
+
+        // Menu class testing and ordering testing 
 
 
-        Console.WriteLine("\n------------Menu testing ---------------\n");
+        Console.WriteLine("\n------------Menu testing and ordering ---------------\n");
 
         Menu menu = new Menu();
+        Ordering order = new();
+        Console.WriteLine("Welcome to the restaurant management system\n\n");
         while (true)
         { 
-        menu.MenuMangemnet();
+        Console.WriteLine("1. change the menu items");
+        Console.WriteLine("2. Place an order");
+        Console.Write(">> ");
+        int Choice = int.Parse(Console.ReadLine());
+            switch (Choice)
+            {
+                case 1:
+                        menu.MenuMangemnet();
+                    break;
+                case 2:
+                    break;
+                case 3:
+
+                    break;
+                default:
+                    Console.WriteLine("Invalid option, please try again.\n");
+                    break;
+            }
+
         }
-
-
-
-
-
 
 
         //Anas Customer part:
@@ -53,15 +76,12 @@ class Program
 
 
         //Anas ordering part
-        /*
-           Ordering menu = new();
-
-                while (true)
+              /*  while (true)
                 {
-                    menu.DisplayMenu();
-                    int selection = menu.GetUserSelection();
+                    order.ViewItems();
+                    int selection = order.GetUserSelection();
 
-                    if (selection > 0 && selection <= menuItems.Count)
+                    if (selection > 0)
                     {
                         switch (selection)
                         {
@@ -76,10 +96,10 @@ class Program
                                 return;
                             default:
                                 break;
-                        }
+      
                     }
-                }
-        */
+               }*/
+        
     }
 
 }

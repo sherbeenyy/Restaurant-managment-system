@@ -4,9 +4,13 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
+    [Serializable]
 
 public class MenuItem
+
 {
     public string FoodName { get; set; }
     public string FoodDescription { get; set; }
@@ -33,39 +37,45 @@ public class Menu
 // testing in the main function
     public void MenuMangemnet()
     {
-        Console.WriteLine("1. Add new item");
-        Console.WriteLine("2. Edit item by ID");
-        Console.WriteLine("3. View all items");
-        Console.WriteLine("4. Exit");
-        Console.Write("Select an option: ");
-        string option = Console.ReadLine();
-
-        switch (option)
+        bool continueRunning = true;
+        while (continueRunning)
         {
-            case "1":
-                AddNewItem();
-                break;
-            case "2":
-                EditErorrHandler();
-                break;
-            case "3":
-                ViewItems();
-                break;
-            case "4":
-                Environment.Exit(0);
-                break;
-            default:
-                Console.WriteLine("Invalid option, please try again.");
-                break;
+            Console.WriteLine("1. Add new item");
+            Console.WriteLine("2. Edit item by ID");
+            Console.WriteLine("3. View Menu");
+            Console.WriteLine("4. Remove item by ID");
+            Console.WriteLine("5. Exit");
+            Console.Write(">> ");
+            string option = Console.ReadLine();
+            Console.WriteLine("==================");
+
+            switch (option)
+            {
+                case "1":
+                    AddNewItem();
+                    break;
+                case "2":
+                    EditErorrHandler();
+                    break;
+                case "3":
+                    ViewItems();
+                    break;
+                case "4":
+                    RemoveItem();
+                    break;
+                case "5":
+                    continueRunning = false;  // Sets the flag to false to exit the loop.
+                    break;
+                default:
+                    Console.WriteLine("Invalid option, please try again.");
+                    break;
+            }
         }
     }
 
-    
-    
     // function to add new item to the menu from the user
     public void AddNewItem()
     {
-
 
          Console.Write("Enter item name: ");
         string name = Console.ReadLine();
@@ -75,6 +85,7 @@ public class Menu
 
         Console.Write("Enter item price: ");
         decimal price;
+
         while (!decimal.TryParse(Console.ReadLine(), out price))
         {
             Console.WriteLine("Invalid input for price. Please enter a decimal value.");
@@ -85,6 +96,7 @@ public class Menu
         string category = Console.ReadLine();
 
         // Ask the user for a unique id for the item
+
         bool isUnique = false;
         int foodId;
         do
@@ -109,15 +121,72 @@ public class Menu
 
         var newItem = new MenuItem(name, description, price, category,foodId);
 
+       
+        // input data into file and print for testing 
+
+        string path = @"C:\Users\mazen\OneDrive\Desktop\test\OOP project\Restaurant-managment-system\Restaurant managment system\files\menu.txt";
+        if (!File.Exists(path))
+        {
+            // Create a file to write to.
+            using (StreamWriter sw = File.CreateText(path))
+            {
+                sw.WriteLine($" foodID: , name: , description: , price: , category: ");
+                sw.WriteLine($"{foodId} {name} {description} {price} {category} ");
+            }
+        }
+        else
+        {
+            using (StreamWriter sw = File.AppendText(path))
+            {
+                sw.WriteLine($"{foodId} {name} {description} {price} {category} ");
+            }
+        }
+
+        {
+            // Open the file to read from.
+            using (StreamReader sr = File.OpenText(path))
+            {
+                string s;
+                while ((s = sr.ReadLine()) != null)
+                {
+                    Console.WriteLine(s);
+                }
+            }
+        }
+
+
         // Add the new item to the list
 
         Createitem(newItem);// .add is a built in function in list to add new items 
 
-        Console.WriteLine("New item added successfully.");
-    }
-    
+        Console.WriteLine("\nNew item added successfully.\n");
 
-// add item to the list
+    }
+
+
+    // remove item from list by id
+    public void RemoveItem()
+    {
+        Console.WriteLine("Enter the id of the item you want to remove ? : ");
+        Console.Write(">> ");
+        int id = int.Parse(Console.ReadLine());
+
+        // Find item by id and remove it
+        MenuItem item = menuItems.FirstOrDefault(x => x.FoodId == id);
+        if (item != null)
+        {
+            Console.WriteLine("Item removed successfully."+item.FoodName);
+            menuItems.Remove(item);
+        }
+        else
+        {
+            Console.WriteLine("Item not found\n");
+            Console.WriteLine("==================================");
+        }
+    }
+
+
+    // add item to the list
     public void Createitem(MenuItem item)
     {
         menuItems.Add(item);
@@ -125,20 +194,6 @@ public class Menu
 
         
 
-
-// remove item from list by id
-    public void RemoveItem(int id)
-    {
-        // Find item by id and remove it
-        MenuItem item = menuItems.FirstOrDefault(x => x.FoodId == id);
-        if (item != null)
-        {
-            menuItems.Remove(item);
-        }
-        else{
-            Console.WriteLine("Item not found");
-        }
-    }
 
     // edit item by id
     public void EditItem(int id)
@@ -184,7 +239,9 @@ public class Menu
         }
         else
         {
-            Console.WriteLine("Item not found");
+            Console.Clear();
+            Console.WriteLine("Item not found\n");
+            Console.WriteLine("==================================");
         }
     }
 
@@ -205,7 +262,8 @@ public class Menu
         try
                 {
                     Console.WriteLine("Enter the id of the item you want to edit ? : ");
-                    int id = int.Parse(Console.ReadLine());
+                    Console.Write(">> ");
+            int id = int.Parse(Console.ReadLine());
                     EditItem(id);
                 }
                 catch (Exception e)
@@ -215,23 +273,17 @@ public class Menu
 
                 }
    }
+    public virtual void ViewItems()
+    {
+        Console.WriteLine("Welcome to the Menu!");
 
-    public void showCategory(string c)
-    {
-        foreach (MenuItem item in menuItems)
+        foreach (var item in menuItems)
         {
-            if (item.FoodCategory == c)
-            {
-                Console.WriteLine($"Name: {item.FoodName}\n Description: {item.FoodDescription}\n Price: {item.FoodPrice}\n Category: {item.FoodCategory}\n Id: {item.FoodId}");
-            }
-        }
-    }
-    public void ViewItems()
-    {
-        foreach (MenuItem item in menuItems)
-        {
-            Console.WriteLine($"Name: {item.FoodName}\n Description: {item.FoodDescription}\n Price: {item.FoodPrice}\n Category: {item.FoodCategory}\n Id: {item.FoodId}");
-        }
+            Console.WriteLine($"ID: {item.FoodId} , Name: {item.FoodName} , Description: {item.FoodDescription} , Price: {item.FoodPrice} , Category: {item.FoodCategory}\n ");
+        }  
+        Console.WriteLine("==================");
+     
+       
     }
 }
 
