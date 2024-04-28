@@ -29,8 +29,6 @@ public class MenuItem
     }
 }
 
-
-
 public class Menu
 {
    private List<MenuItem> menuItems = new List<MenuItem>(); // create a list of menu items named menuItems

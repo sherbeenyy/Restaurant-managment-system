@@ -18,7 +18,6 @@ using System.Threading.Tasks;
             Manager newManager = new Manager(e.Id, e.Role, e.Name, e.Age, e.Address, e.PhoneNumber, e.WorkingHours, e.Shift, 0);
             newManager.Name = e.Name;
             newManager.Age = e.Age;
-            newManager.Salary = e.Salary;
             newManager.Id = e.Id;
 
             managers.Add(newManager);

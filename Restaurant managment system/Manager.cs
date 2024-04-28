@@ -4,6 +4,8 @@ using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using Newtonsoft.Json;
 
 public class Manager : Employee
@@ -22,24 +24,13 @@ public class Manager : Employee
         }
 
 
-        protected List<Employee> employees = new List<Employee>(); //data strcuter like the array but easier to add and delete ;
+        public List<Employee> employees = new List<Employee>(); //data strcuter like the array but easier to add and delete ;
+
         List<string> allowedRoles = new List<string>
         {
             "chef","delivery", "waiter","cashier"
         };
         //searching in the list if the role exist 
-        private bool foundInAllowedRoles(Employee e)
-        {
-            for (int i = 0; i < allowedRoles.Count; i++)
-            {
-                if (allowedRoles[i] == e.Role)
-                    return true;
-
-            }
-            return false;
-        }
-
-     
 
             public bool login(string username, string password)
         {
@@ -58,6 +49,7 @@ public class Manager : Employee
         {
             Console.Write("Enter the employee role: ");
             string role = Console.ReadLine();
+
             while (!allowedRoles.Contains(role))
             {
                 Console.WriteLine("Invalid role, please try again.");
@@ -68,12 +60,8 @@ public class Manager : Employee
             string name = Console.ReadLine();
 
             Console.Write("Enter the employee age: ");
-            string ageInput = Console.ReadLine();
-            if (!int.TryParse(ageInput, out int age) || age < 18)
-            {
-                Console.WriteLine("Invalid age. Must be 18 or older.");
-                return; // Exit if invalid age
-            }
+            int  age = int.Parse(Console.ReadLine());
+            
 
             Console.Write("Enter the employee address: ");
             string address = Console.ReadLine();
@@ -82,20 +70,13 @@ public class Manager : Employee
             string phoneNumber = Console.ReadLine();
 
             Console.Write("Enter the employee working hours: ");
-            if (!float.TryParse(Console.ReadLine(), out float workingHours))
-            {
-                Console.WriteLine("Invalid input for working hours.");
-                return; // Exit if invalid input
-            }
+            float workingHours = float.Parse(Console.ReadLine());
 
             Console.Write("Enter the employee shift: ");
-            if (!int.TryParse(Console.ReadLine(), out int shift))
-            {
-                Console.WriteLine("Invalid input for shift.");
-                return; // Exit if invalid input
-            }
+            int shift = int.Parse(Console.ReadLine());
 
             Employee newEmployee = new Employee(employees.Count + 1, role, name, age, address, phoneNumber, workingHours, shift);
+
             employees.Add(newEmployee);
             SaveItemsToFile();
             Console.WriteLine("Employee added successfully");
@@ -111,16 +92,9 @@ public class Manager : Employee
     {
             Console.WriteLine("Employees List");
             
-        foreach (Employee e in employees)
+        foreach (var item in employees)
         {
-                Console.WriteLine("Employee ID: " + e.Id);
-                Console.WriteLine("Employee Role: " + e.Role);
-                Console.WriteLine("Employee Name: " + e.Name);
-                Console.WriteLine("Employee Age: " + e.Age);
-                Console.WriteLine("Employee Address: " + e.Address);
-                Console.WriteLine("Employee Phone Number: " + e.PhoneNumber);
-                Console.WriteLine("Employee Working Hours: " + e.WorkingHours);
-                Console.WriteLine("Employee Shift: " + e.Shift);
+                item.displayInfo();
                 Console.WriteLine("==================================");
             }
 
@@ -166,15 +140,16 @@ public class Manager : Employee
         }
     }
 
-
-    public void SaveItemsToFile() // Save employees to JSON file
+    public void SaveItemsToFile()
     {
-        string path = @"C:\Users\mazen\OneDrive\Desktop\test\OOP project\Restaurant-managment-system\Restaurant managment system\files\employee.json";
-        string json = JsonConvert.SerializeObject(employees, Formatting.Indented); // Serialize the list to JSON with indented format
+        string json = JsonConvert.SerializeObject(employees, Formatting.Indented);
+        Console.WriteLine("Debug - Serialized JSON: " + json);  // Check the serialized output
+
+        string path = @"C:\Users\mazen\OneDrive\Desktop\test\OOP project\Restaurant-managment-system\Restaurant managment system\files\employee.json";  // Update this path as necessary
         File.WriteAllText(path, json);
     }
 
-    public void ManagerManagement()
+        public void ManagerManagement()
     {
         LoadItemsFromFile();
         bool continueRunning = true;
@@ -209,13 +184,3 @@ public class Manager : Employee
         }
     }
 }
-
-
-
-    //add employee ..create new employee
-
-   
-
-
-
-

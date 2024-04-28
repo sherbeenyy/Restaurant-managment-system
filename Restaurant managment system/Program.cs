@@ -5,6 +5,8 @@ using System;
 using System.IO;
 using System.Linq.Expressions;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.CompilerServices;
+using System.ComponentModel.Design.Serialization;
 
 
 class Program
@@ -75,6 +77,9 @@ class Program
 
         }
 
+
+        /*Employee emp1 = new Employee(0,"waiter","mazen",22,"cairo","010140132",12,1);
+        emp1.displayInfo();*/
 
         //Anas Customer part:
         /*Customer customer = new Customer("", "", "");

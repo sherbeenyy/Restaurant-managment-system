@@ -1,14 +1,12 @@
 [
   {
-    "Age": 0,
-    "Address": "blah",
-    "PhoneNumber": "01014073717",
-    "WorkingHours": 0.0,
-    "Salary": 0.0,
-    "Shift": 0,
+    "Id": 1,
     "Role": "waiter",
     "Name": "mazen",
-    "Id": 0,
-    "TotalEmployees": 2
+    "Age": 22,
+    "Address": "adesdawd",
+    "PhoneNumber": "12321324",
+    "WorkingHours": 12.0,
+    "Shift": 1
   }
 ]
