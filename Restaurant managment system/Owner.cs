@@ -5,9 +5,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Restaurant_managment_system
-{
-    internal class Owner : Manager
+    public class Owner : Manager
     {
         public Owner(int id, string role, string name, int age, string address, string phoneNumber, float workingHours, int shift, float expYears) : base(id, role, name, age, address, phoneNumber, workingHours, shift, expYears)
         {
@@ -39,6 +37,6 @@ namespace Restaurant_managment_system
        
 
     }
-}
+
 
 

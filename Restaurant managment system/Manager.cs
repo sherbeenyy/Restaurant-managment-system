@@ -39,22 +39,7 @@ public class Manager : Employee
             return false;
         }
 
-        /*public bool checkIfValid(Employee e)
-        {
-
-            // INCOMPLETE !!  we should check for other parameters employee is having 
-            if (e.Age < 18)
-            {
-                Console.WriteLine("can't hire people who is less than 18 years old ");
-                return false;
-            }
-            if (!foundInAllowedRoles(e))
-            {
-                Console.WriteLine("invalid role");
-                return false;
-            }
-            return true;
-        }*/
+     
 
             public bool login(string username, string password)
         {
@@ -121,18 +106,30 @@ public class Manager : Employee
         }
     }
 
-    // print employees
+    // print all employees info
     public void printEmployees()
     {
             Console.WriteLine("Employees List");
-       
-        for (int i = 0; i < employees.Count; i++)
-            {
-                Console.WriteLine(employees[i].Name);
+            
+        foreach (Employee e in employees)
+        {
+                Console.WriteLine("Employee ID: " + e.Id);
+                Console.WriteLine("Employee Role: " + e.Role);
+                Console.WriteLine("Employee Name: " + e.Name);
+                Console.WriteLine("Employee Age: " + e.Age);
+                Console.WriteLine("Employee Address: " + e.Address);
+                Console.WriteLine("Employee Phone Number: " + e.PhoneNumber);
+                Console.WriteLine("Employee Working Hours: " + e.WorkingHours);
+                Console.WriteLine("Employee Shift: " + e.Shift);
+                Console.WriteLine("==================================");
             }
-            Console.WriteLine("==================");
-    }
 
+
+
+            Console.WriteLine("==================================");
+
+       
+    }
         //Remove employee
         public void fire()
         {
@@ -158,6 +155,7 @@ public class Manager : Employee
             }
             else Console.WriteLine("you are not authorized to do this action");
         }
+
     public void LoadItemsFromFile() // Load employees from JSON file
     {
         string path = @"C:\Users\mazen\OneDrive\Desktop\test\OOP project\Restaurant-managment-system\Restaurant managment system\files\employee.json";
@@ -167,6 +165,7 @@ public class Manager : Employee
             employees = JsonConvert.DeserializeObject<List<Employee>>(json) ?? new List<Employee>(); // Deserialize json to List<Employee>, if null create new List
         }
     }
+
 
     public void SaveItemsToFile() // Save employees to JSON file
     {

@@ -28,7 +28,9 @@ using System.Threading.Tasks;
             _address = address;
             _phoneNumber = phoneNumber;
             _workingHours = workingHours;
+        _salary = workingHours * 12.2f * 26;
             _shift = shift;
+            _totalEmployees++;
         }
         ~Employee() { } //clean up when the object is destroyed;
         public int Age
