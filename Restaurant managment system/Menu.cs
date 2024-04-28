@@ -32,11 +32,15 @@ public class MenuItem
 
 public class Menu
 {
+   
+        
+ 
     private List<MenuItem> menuItems = new List<MenuItem>(); // create a list of menu items named menuItems
 
 // testing in the main function
     public void MenuMangemnet()
     {
+        LoadItemsFromFile();  // Load items when the program starts
         bool continueRunning = true;
         while (continueRunning)
         {
@@ -158,6 +162,7 @@ public class Menu
         // Add the new item to the list
 
         Createitem(newItem);// .add is a built in function in list to add new items 
+        SaveItemsToFile();
 
         Console.WriteLine("\nNew item added successfully.\n");
 
@@ -167,21 +172,27 @@ public class Menu
     // remove item from list by id
     public void RemoveItem()
     {
-        Console.WriteLine("Enter the id of the item you want to remove ? : ");
+        Console.WriteLine("Enter the ID of the item you want to remove:");
         Console.Write(">> ");
-        int id = int.Parse(Console.ReadLine());
+        string input = Console.ReadLine();
+        int id;
 
-        // Find item by id and remove it
-        MenuItem item = menuItems.FirstOrDefault(x => x.FoodId == id);
+        if (!int.TryParse(input, out id))
+        {
+            Console.WriteLine("Invalid input. Please enter a valid integer for ID.");
+            return; // Early return to avoid further processing
+        }
+
+        var item = menuItems.FirstOrDefault(x => x.FoodId == id);
         if (item != null)
         {
-            Console.WriteLine("Item removed successfully."+item.FoodName);
-            menuItems.Remove(item);
+            menuItems.Remove(item); // Remove the item from the list
+            SaveItemsToFile();      // Save the current state of list to file
+            Console.WriteLine($"Item removed successfully: {item.FoodName}");
         }
         else
         {
-            Console.WriteLine("Item not found\n");
-            Console.WriteLine("==================================");
+            Console.WriteLine("Item not found.");
         }
     }
 
@@ -243,6 +254,7 @@ public class Menu
             Console.WriteLine("Item not found\n");
             Console.WriteLine("==================================");
         }
+        SaveItemsToFile();
     }
 
     private void EditAll(MenuItem item)
@@ -285,9 +297,46 @@ public class Menu
      
        
     }
+
+    public void LoadItemsFromFile()
+    {
+        string path = @"C:\Users\mazen\OneDrive\Desktop\test\OOP project\Restaurant-managment-system\Restaurant managment system\files\menu.txt";
+        if (File.Exists(path))
+        {
+            using (StreamReader sr = new StreamReader(path))
+            {
+                string line;
+                while ((line = sr.ReadLine()) != null)
+                {
+                    var data = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (data.Length >= 5)
+                    {
+                        int id = int.Parse(data[0]);
+                        string name = data[1];
+                        string description = data[2];
+                        decimal price = decimal.Parse(data[3]);
+                        string category = data[4];
+                        MenuItem newItem = new MenuItem(name, description, price, category, id);
+                        menuItems.Add(newItem);
+                    }
+                }
+            }
+        }
+    }
+public void SaveItemsToFile()
+    {
+        string path = @"C:\Users\mazen\OneDrive\Desktop\test\OOP project\Restaurant-managment-system\Restaurant managment system\files\menu.txt";
+        using (StreamWriter sw = new StreamWriter(path))
+        {
+            foreach (var item in menuItems)
+            {
+                sw.WriteLine($"{item.FoodId} {item.FoodName} {item.FoodDescription} {item.FoodPrice} {item.FoodCategory}");
+            }
+        }
+    }
 }
 
-    
 
-  
+
+
 

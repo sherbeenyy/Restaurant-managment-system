@@ -1,4 +1,2 @@
-1 burger cheese 12 food 
-1 burger cheese 12 food 
-2 pizza khara 10000 my ass 
-1 asd asd 12 assd 
+1 mazen cheese 12 food
+3 hotdog big 14.0 food
