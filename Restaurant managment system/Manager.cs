@@ -146,7 +146,7 @@ public class Manager : Employee
 
     public void LoadItemsFromFile() // Load employees from JSON file
     {
-        string path = @"C:\Users\mazen\OneDrive\Desktop\test\OOP project\Restaurant-managment-system\Restaurant managment system\files\employee.json";
+        string path = @"E:\programming\Project\Restaurant-managment-system\Files\employee.json";
         if (File.Exists(path))
         {
             string json = File.ReadAllText(path);
@@ -159,7 +159,7 @@ public class Manager : Employee
         string json = JsonConvert.SerializeObject(employees, Formatting.Indented);
         Console.WriteLine("Debug - Serialized JSON: " + json);  // Check the serialized output
 
-        string path = @"C:\Users\mazen\OneDrive\Desktop\test\OOP project\Restaurant-managment-system\Restaurant managment system\files\employee.json";
+        string path = @"E:\programming\Project\Restaurant-managment-system\Files\employee.json";
         File.WriteAllText(path, json);
     }
 

@@ -18,8 +18,59 @@ public class Customer
         Name = name;
         PhoneNumber = phoneNumber;
         Address = address;
-        LoyaltyPoints = 0;
+        LoyaltyPoints=+2;
     }
+    public  Customer()
+    {
+
+    }
+
+     
+     public void CustomerManagement()
+{
+    bool continueRunning = true;
+    while (continueRunning)
+    {
+        Console.WriteLine("Select an option:");
+        Console.WriteLine("1. Add Customer");
+        Console.WriteLine("2. Edit Customer");
+        Console.WriteLine("3. Display All Customers");
+        Console.WriteLine("4. Exit");
+
+        string option = Console.ReadLine();
+        switch (option)
+        {
+            case "1":
+                AddCustomer();
+                Console.WriteLine("Customer added successfully.");
+                break;
+            case "2":
+                Console.Write("Please enter your Phone Number: ");
+                string phone = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(phone))
+                {
+                    Console.WriteLine("Phone number cannot be empty. Please try again.");
+                }
+                else
+                {
+                    DisplayCustomer(phone);
+                    EditCustomerInfo(phone);
+                }
+                break;
+            case "3":
+                Displayall();
+                break;
+            case "4":
+                continueRunning = false;  // Sets the flag to false to exit the loop.
+                break;
+            default:
+                Console.WriteLine("Invalid option, please try again.");
+                break;
+        }
+    }
+}
+    
+    
 
     private List<Customer> customers = new List<Customer>(); // create a list of customers names customers
 
@@ -79,8 +130,8 @@ public class Customer
 
         Console.Write("Enter customer address: ");
         string Address = Console.ReadLine();
-
-        AddLoyaltyPoints(2); // Add 2 loyalty points for each entry to change loyalty points change the number 2
+        AddLoyaltyPoints(2);
+ // Add 2 loyalty points for each entry to change loyalty points change the number 2
         customers.Add(new Customer(Name, PhoneNumber, Address));
     }
 
@@ -88,35 +139,39 @@ public class Customer
     {
         LoyaltyPoints += points;
     }
+    
 
 
-    public void DisplayCustomer()
+    public void DisplayCustomer(string phone)
+{
+    Customer person = customers.FirstOrDefault(x => x.PhoneNumber == phone);
+    if (person != null)
     {
-        Console.WriteLine($"Name: {Name}, Phone Number: {PhoneNumber}, Address: {Address}, Loyalty Points: {LoyaltyPoints}");
+        Console.WriteLine($"Name: {person.Name}, Phone Number: {person.PhoneNumber}, Address: {person.Address}, Loyalty Points: {person.LoyaltyPoints}");
     }
+    else
+    {
+        Console.WriteLine("Customer not found.");
+    }
+}
 
+public void Displayall()
+{
+    if (customers.Count > 0)
+    {
+        foreach (var person in customers)
+        {
+            Console.WriteLine($"Name: {person.Name}, Phone Number: {person.PhoneNumber}, Address: {person.Address}, Loyalty Points: {person.LoyaltyPoints}");
+        }
+    }
+    else
+    {
+        Console.WriteLine("No customers found.");
+    }
+}
     // file handeling code 
 
-    public void LoadItemsFromFile()
-    {
-        string path = @"C:\Users\mazen\OneDrive\Desktop\test\OOP project\Restaurant-managment-system\Restaurant managment system\files\menu.json";
-
-        if (File.Exists(path))
-        {
-            string json = File.ReadAllText(path); // Read JSON content from the file
-            customers = JsonConvert.DeserializeObject<List<Customer>>(json) ?? new List<Customer>(); // Deserialize JSON to List<MenuItem>
-        }
-        else
-        {
-            customers = new List<Customer>(); // Initialize empty list if file doesn't exist
-        }
-    }
-    public void SaveItemsToFile()
-    {
-        string path = @"C:\Users\mazen\OneDrive\Desktop\test\OOP project\Restaurant-managment-system\Restaurant managment system\files\menu.json";
-        string json = JsonConvert.SerializeObject(customers, Formatting.Indented); // Serialize list to JSON
-        File.WriteAllText(path, json); // Write JSON content to the file
-    }
-
-
+    
 }
+
+
