@@ -91,7 +91,7 @@ class Program
                             ahmed.ManagerManagement();
                             break;
                         case 5:
-                        resreve.reservationManagment();
+                        resreve.ReservationManagement();
                             break;
                         default:
                             Console.WriteLine("Invalid option, please try again.\n");
