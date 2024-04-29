@@ -49,7 +49,7 @@ public void OrderingManagement()
         {
             case "1":
                 AddCustomer();
-                Console.WriteLine("Customer added successfully.");
+                Console.WriteLine("Customer added successfully.");//still didnt make the function to repace when the functions are done i will change it
                 break;
             case "2":
                 Console.Write("Please enter your Phone Number: ");
