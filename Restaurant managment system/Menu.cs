@@ -253,7 +253,7 @@ public class Menu
 
         foreach (var item in menuItems)
         {
-            Console.WriteLine($"ID: {item.FoodId}\nName: {item.FoodName}\nDescription: {item.FoodDescription}\nPrice: {item.FoodPrice}\nCategory: {item.FoodCategory}\n");
+            Console.WriteLine($"ID: {item.FoodId} , Name: {item.FoodName} , Description: {item.FoodDescription} , Price: {item.FoodPrice} , Category: {item.FoodCategory}\n ");
         }  
         Console.WriteLine("==================");
      
@@ -262,7 +262,7 @@ public class Menu
 
     public void LoadItemsFromFile()
     {
-        string path = @"C:\Users\mazen\OneDrive\Desktop\test\OOP project\Restaurant-managment-system\Restaurant managment system\files\menu.json";
+        string path = @"E:\programming\Project\Restaurant-managment-system\Files\menu.json";
 
         if (File.Exists(path))
         {
@@ -276,7 +276,7 @@ public class Menu
     }
     public void SaveItemsToFile()
     {
-        string path = @"C:\Users\mazen\OneDrive\Desktop\test\OOP project\Restaurant-managment-system\Restaurant managment system\files\menu.json";
+        string path = @"E:\programming\Project\Restaurant-managment-system\Files\menu.json";
         string json = JsonConvert.SerializeObject(menuItems, Formatting.Indented); // Serialize list to JSON
         File.WriteAllText(path, json); // Write JSON content to the file
     }
