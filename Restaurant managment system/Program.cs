@@ -45,7 +45,7 @@ class Program
 
         Menu menu = new Menu();
         Ordering order = new();
-        Manager ahmed = new Manager(1, "manager", "ahmed", 20, "cairo", "01111111", 12, 0, 0);
+        Manager ahmed = new Manager(1, "manager", "ahmed", 20, "cairo", "01111111", 8, "night",12 ,0);
 
         Console.WriteLine("Welcome to the restaurant management system\n\n");
         while (true)

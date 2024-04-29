@@ -17,19 +17,23 @@ public class Manager : Employee
             get { return _expYears; }
             set { _expYears = value; }
         }
-        public Manager(int id, string role, string name, int age, string address, string phoneNumber, float workingHours, int shift, float expYears)
-        : base(id, role, name, age, address, phoneNumber, workingHours, shift)
+        public Manager(int id, string role, string name, int age, string address, string phoneNumber, decimal workingHours, string shift,decimal wage, float expYears)
+        : base(id, role, name, age, address, phoneNumber, workingHours,shift,wage)
         {
             _expYears = expYears;
         }
 
+    public List<Employee> employees = new List<Employee>(); //data strcuter like the array but easier to add and delete ;
 
-        public List<Employee> employees = new List<Employee>(); //data strcuter like the array but easier to add and delete ;
-
-        List<string> allowedRoles = new List<string>
+        List<string> AllowedRoles = new List<string>
         {
             "chef","delivery", "waiter","cashier"
         };
+
+        List<string> AllowedShifts = new List<string>
+         {
+            "day","night","Day","Night"
+         };
         //searching in the list if the role exist 
 
             public bool login(string username, string password)
@@ -50,7 +54,7 @@ public class Manager : Employee
             Console.Write("Enter the employee role: ");
             string role = Console.ReadLine();
 
-            while (!allowedRoles.Contains(role))
+            while (!AllowedRoles.Contains(role))
             {
                 Console.WriteLine("Invalid role, please try again.");
                 role = Console.ReadLine();
@@ -70,12 +74,23 @@ public class Manager : Employee
             string phoneNumber = Console.ReadLine();
 
             Console.Write("Enter the employee working hours: ");
-            float workingHours = float.Parse(Console.ReadLine());
+            decimal workingHours = decimal.Parse(Console.ReadLine());
 
             Console.Write("Enter the employee shift: ");
-            int shift = int.Parse(Console.ReadLine());
+            string shift = Console.ReadLine();
 
-            Employee newEmployee = new Employee(employees.Count + 1, role, name, age, address, phoneNumber, workingHours, shift);
+            while (!AllowedShifts.Contains(shift))
+            {
+                Console.WriteLine("Invalid Shift, please try again.");
+                shift = Console.ReadLine();
+            }
+
+            Console.WriteLine("Enter employee wage: ");
+            decimal wage = decimal.Parse(Console.ReadLine());
+
+
+
+            Employee newEmployee = new Employee(employees.Count + 1, role, name, age, address, phoneNumber, workingHours, shift, wage);
 
             employees.Add(newEmployee);
             SaveItemsToFile();
@@ -90,19 +105,14 @@ public class Manager : Employee
     // print all employees info
     public void printEmployees()
     {
-            Console.WriteLine("Employees List");
+            Console.WriteLine("+================Employees List========================");
             
         foreach (var item in employees)
         {
                 item.displayInfo();
                 Console.WriteLine("==================================");
-            }
-
-
-
-            Console.WriteLine("==================================");
-
-       
+        }
+            
     }
         //Remove employee
         public void fire()
@@ -145,7 +155,7 @@ public class Manager : Employee
         string json = JsonConvert.SerializeObject(employees, Formatting.Indented);
         Console.WriteLine("Debug - Serialized JSON: " + json);  // Check the serialized output
 
-        string path = @"C:\Users\mazen\OneDrive\Desktop\test\OOP project\Restaurant-managment-system\Restaurant managment system\files\employee.json";  // Update this path as necessary
+        string path = @"C:\Users\mazen\OneDrive\Desktop\test\OOP project\Restaurant-managment-system\Restaurant managment system\files\employee.json";
         File.WriteAllText(path, json);
     }
 
@@ -157,8 +167,9 @@ public class Manager : Employee
         {
             Console.WriteLine("1. Hire Employee");
             Console.WriteLine("2. Fire Employee ");
-            Console.WriteLine("3. View Employees ");
-            Console.WriteLine("4. Exit");
+            Console.WriteLine("3. Update Employee info");
+            Console.WriteLine("4. View Employees ");
+            Console.WriteLine("5. Exit");
             Console.Write(">> ");
             string option = Console.ReadLine();
             Console.WriteLine("==================");
@@ -172,9 +183,13 @@ public class Manager : Employee
                     fire();
                     break;
                 case "3":
-                    printEmployees();
+                    // update employee by id 
                     break;
                 case "4":
+                    
+                    printEmployees();
+                    break;
+                case "5":
                     continueRunning = false;  // Sets the flag to false to exit the loop.
                     break;
                 default:

@@ -7,15 +7,16 @@ using System.Threading.Tasks;
 
     public class Owner : Manager
     {
-        public Owner(int id, string role, string name, int age, string address, string phoneNumber, float workingHours, int shift, float expYears) : base(id, role, name, age, address, phoneNumber, workingHours, shift, expYears)
+        public Owner(int id, string role, string name, int age, string address, string phoneNumber, decimal workingHours, string shift,decimal wage, float expYears) : base(id, role, name, age, address, phoneNumber, workingHours, shift,wage,expYears)
         {
+
         }
         List<Manager> managers = new List<Manager>();
 
         public Manager promoteToManager(Employee e)
         {
             e.Role = "manager";
-            Manager newManager = new Manager(e.Id, e.Role, e.Name, e.Age, e.Address, e.PhoneNumber, e.WorkingHours, e.Shift, 0);
+            Manager newManager = new Manager(e.Id, e.Role, e.Name, e.Age, e.Address, e.PhoneNumber, e.WorkingHours, e.Shift, 0,0);
             newManager.Name = e.Name;
             newManager.Age = e.Age;
             newManager.Id = e.Id;

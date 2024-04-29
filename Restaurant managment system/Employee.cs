@@ -14,10 +14,19 @@ public class Employee
     public int Age { get; set; }
     public string Address { get; set; }
     public string PhoneNumber { get; set; }
-    public float WorkingHours { get; set; }
-    public int Shift { get; set; }
+    public decimal WorkingHours { get; set; }
+    public string Shift { get; set; }
+    public decimal Salary { get; set; }
 
-    public Employee(int id, string role, string name, int age, string address, string phoneNumber, float workingHours, int shift)
+    public decimal Wage { get; set; }
+
+    // default constructor
+    public Employee()
+    {
+
+    }
+
+    public Employee(int id, string role, string name, int age, string address, string phoneNumber, decimal workingHours, string shift, decimal wage)
     {
         Id = id;
         Role = role;
@@ -27,6 +36,8 @@ public class Employee
         PhoneNumber = phoneNumber;
         WorkingHours = workingHours;
         Shift = shift;
+        Wage = wage;
+        Salary = workingHours * wage;
     }
 
     public void displayInfo()
@@ -39,6 +50,7 @@ public class Employee
         Console.WriteLine("Employee Phone Number: " + PhoneNumber);
         Console.WriteLine("Employee Working Hours: " + WorkingHours);
         Console.WriteLine("Employee Shift: " + Shift);
+        Console.WriteLine("Employee Salary: " + Salary);
     }
 
 }    

@@ -253,7 +253,7 @@ public class Menu
 
         foreach (var item in menuItems)
         {
-            Console.WriteLine($"ID: {item.FoodId} , Name: {item.FoodName} , Description: {item.FoodDescription} , Price: {item.FoodPrice} , Category: {item.FoodCategory}\n ");
+            Console.WriteLine($"ID: {item.FoodId}\nName: {item.FoodName}\nDescription: {item.FoodDescription}\nPrice: {item.FoodPrice}\nCategory: {item.FoodCategory}\n");
         }  
         Console.WriteLine("==================");
      
