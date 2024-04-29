@@ -5,11 +5,12 @@ the price+ if everything is working well*/
 public class Ordering
 {
     public int OrderID { get; set; }
-    public int Receipt { get; set; } 
-    public int TaxRate { get; set; }     
+    public int Receipt { get; set; }
+    public int TaxRate { get; set; }
     public int ServiceCharge { get; set; }
     public string OrderDate { get; set; }
     public List<OrderItem> OrderItems { get; set; }
+    
 
     public Ordering(int orderID, int receipt, int taxRate, int serviceCharge, string orderDate)
     {
@@ -18,15 +19,14 @@ public class Ordering
         TaxRate = taxRate;
         ServiceCharge = serviceCharge;
         OrderDate = orderDate;
-
         // Initialize the OrderItems list
         OrderItems = new List<OrderItem>();
     }
-    
- public Ordering()
+
+    public Ordering()
     {
     }
-    
+
     public class OrderItem
     {
         public int ItemId { get; set; }
@@ -61,6 +61,7 @@ public class Ordering
 
     public int CalculateTax()
     {
+        TaxRate=14;//<------TaxRate can be change anytime we want
         int subtotal = 0;
         foreach (var item in OrderItems)
         {
@@ -71,10 +72,11 @@ public class Ordering
 
     public int CalculateTotalCost()
     {
+        ServiceCharge=50;//<------ServiceCharge can be change anytime we want
         int subtotal = 0;
         foreach (var item in OrderItems)
         {
-            subtotal += item.Quantity; // assuming the quantity is the price of the item <--------- Need changing to price
+            subtotal += item.Quantity; // assuming the quantity is the price of the item
         }
         return subtotal + (subtotal * TaxRate / 100) + ServiceCharge;
     }
@@ -110,7 +112,7 @@ public class Ordering
                     To View the menu
                     break;*/
                 case "2":
-                    Console.Write("Please Enter The Food Id: ");
+                    Console.Write("Please enter the food Id: ");
                     string itemIdStr = Console.ReadLine();
                     if (int.TryParse(itemIdStr, out int itemId))
                     {
