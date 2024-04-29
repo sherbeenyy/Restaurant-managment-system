@@ -1,96 +1,78 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 
 public class Ordering
 {
-    // properties
+    public int OrderID { get; set; }
+    public int Receipt { get; set; }
+    public int TaxRate { get; set; }
+    public int ServiceCharge { get; set; }
+    public string OrderDate { get; set; }
+    public List<OrderItem> OrderItems { get; set; }
 
-    public int OrderID { get; private set; }
-    public int OrderItems { get; private set; }
-    public int Receipt { get; private set; }
-    public int TaxRate { get; private set; }
-    public int ServiceCharge { get; private set; }
-    public string OrderDate { get; private set; }
-
-    // constructor
-
-    public Ordering(int orderID, int orderItems, int receipt, int taxRate, int serviceCharge, string orderDate)
+    public Ordering(int orderID, int receipt, int taxRate, int serviceCharge, string orderDate)
     {
         OrderID = orderID;
-        OrderItems = orderItems;
         Receipt = receipt;
         TaxRate = taxRate;
         ServiceCharge = serviceCharge;
         OrderDate = orderDate;
+
+        // Initialize the OrderItems list
+        OrderItems = new List<OrderItem>();
     }
 
-    public Ordering()
+    public class OrderItem
     {
-    }
+        public int ItemId { get; set; }
+        public int Quantity { get; set; }
 
-/*public void OrderingManagement()
-{
-    bool continueRunning = true;
-    while (continueRunning)
-    {
-        Console.WriteLine("Select an option:");
-        Console.WriteLine("1. Order");//To write the food id and the quantity
-        Console.WriteLine("2. Edit order");//To edit the order (To change of food,quantity, addor remove food)
-        Console.WriteLine("3. Reciept");
-        Console.WriteLine("4. Exit");
-
-        string option = Console.ReadLine();
-        switch (option)
+        public OrderItem(int itemId, int quantity)
         {
-            case "1":
-                AddCustomer();
-                Console.WriteLine("Customer added successfully.");//still didnt make the function to replace when the functions are done i will change it
-                break;
-            case "2":
-                Console.Write("Please enter your Phone Number: ");
-                string phone = Console.ReadLine();
-                if (string.IsNullOrWhiteSpace(phone))
-                {
-                    Console.WriteLine("Phone number cannot be empty. Please try again.");
-                }
-                else
-                {
-                    DisplayCustomer(phone);
-                    EditCustomerInfo(phone);
-                }
-                break;
-            case "3":
-                PrintOrderDetails();
-                break;
-            case "4":
-                continueRunning = false;  // Sets the flag to false to exit the loop.
-                break;
-            default:
-                Console.WriteLine("Invalid option, please try again.");
-                break;
+            ItemId = itemId;
+            Quantity = quantity;
         }
     }
-}*/
-    // method to calculate the tax based on the order items and tax rate
+
+    public void AddOrderItem(int itemId, int quantity)
+    {
+        // Add a new OrderItem object to the OrderItems list
+        OrderItems.Add(new OrderItem(itemId, quantity));
+    }
+
+    public void EditOrderItemQuantity(int itemId, int newQuantity)
+    {
+        // Find the OrderItem object with the specified itemId
+        OrderItem item = OrderItems.Find(i => i.ItemId == itemId);
+        if (item != null)
+        {
+            item.Quantity = newQuantity;
+        }
+        else
+        {
+            Console.WriteLine("Item not found.");
+        }
+    }
 
     public int CalculateTax()
     {
-        return OrderItems * TaxRate / 100;
+        int subtotal = 0;
+        foreach (var item in OrderItems)
+        {
+            subtotal += item.Quantity; // assuming the quantity is the price of the item
+        }
+        return subtotal * TaxRate / 100;
     }
-
-    // method to calculate the total cost of the order
 
     public int CalculateTotalCost()
     {
-        return OrderItems + CalculateTax() + ServiceCharge;
+        int subtotal = 0;
+        foreach (var item in OrderItems)
+        {
+            subtotal += item.Quantity; // assuming the quantity is the price of the item
+        }
+        return subtotal + (subtotal * TaxRate / 100) + ServiceCharge;
     }
-
-    // method to print the order details
 
     public void PrintOrderDetails()
     {
@@ -103,5 +85,75 @@ public class Ordering
         Console.WriteLine($"Tax: {CalculateTax()}");
         Console.WriteLine($"Total Cost: {CalculateTotalCost()}");
     }
-}
 
+    public void OrderingManagement()
+    {
+        bool continueRunning = true;
+        while (continueRunning)
+        {
+            Console.WriteLine("Select an option:");
+            Console.WriteLine("1. To Order");//To write the food id and the quantity
+            Console.WriteLine("2. To Edit Order Quantity");//To edit the order (To change quantity)
+            Console.WriteLine("3. Reciept");
+            Console.WriteLine("4. Exit");
+
+            string option = Console.ReadLine();
+            switch (option)
+            {
+                case "1":
+                    Console.Write("Please enter the food Id: ");
+                    string itemIdStr = Console.ReadLine();
+                    if (int.TryParse(itemIdStr, out int itemId))
+                    {
+                        Console.Write("Please enter the quantity: ");
+                        string quantityStr = Console.ReadLine();
+                        if (int.TryParse(quantityStr, out int quantity))
+                        {
+                            AddOrderItem(itemId, quantity);
+                            Console.WriteLine("Order added.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid quantity.");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid food Id.");
+                    }
+                    break;
+                case "2":
+                    Console.Write("Please enter the food Id: ");
+                    string editItemIdStr = Console.ReadLine();
+                    if (int.TryParse(editItemIdStr, out int editItemId))
+                    {
+                        Console.Write("Please enter the new quantity: ");
+                        string newQuantityStr = Console.ReadLine();
+                        if (int.TryParse(newQuantityStr, out int newQuantity))
+                        {
+                            EditOrderItemQuantity(editItemId, newQuantity);
+                            Console.WriteLine("Order quantity updated.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid quantity.");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid food Id.");
+                    }
+                    break;
+                case "3":
+                    PrintOrderDetails();
+                    break;
+                case "4":
+                    continueRunning = false;  // Sets the flag to false to exit the loop.
+                    break;
+                default:
+                    Console.WriteLine("Invalid option, please try again.");
+                    break;
+            }
+        }
+    }
+}
