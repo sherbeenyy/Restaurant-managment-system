@@ -22,7 +22,11 @@ public class Ordering
         // Initialize the OrderItems list
         OrderItems = new List<OrderItem>();
     }
-
+    
+ public Ordering()
+    {
+    }
+    
     public class OrderItem
     {
         public int ItemId { get; set; }
