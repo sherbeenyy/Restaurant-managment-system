@@ -44,6 +44,7 @@ class Program
         Ordering order = new();
         Manager ahmed = new Manager(1, "manager", "ahmed", 20, "cairo", "01111111", 8, "night", 12, 0);
         Customer customer=new Customer(); 
+        Reservations resreve = new Reservations();
 
         bool isRunning = true;
         while (isRunning)
@@ -55,7 +56,8 @@ class Program
                     Console.WriteLine("2. Customer Management");
                     Console.WriteLine("3. Place an Order");
                     Console.WriteLine("4. Manage Staff");
-                    Console.WriteLine("5. Exit");
+                    Console.WriteLine("5. Reservation Managment");
+                    Console.WriteLine("6. Exit");
                     Console.Write("Enter your choice >> ");
                     if (!int.TryParse(Console.ReadLine(), out choice))
                     {
@@ -79,8 +81,7 @@ class Program
                             ahmed.ManagerManagement();
                             break;
                         case 5:
-                            Console.WriteLine("Exiting...");
-                            isRunning = false;
+                        resreve.reservationManagment();
                             break;
                         default:
                             Console.WriteLine("Invalid option, please try again.\n");
