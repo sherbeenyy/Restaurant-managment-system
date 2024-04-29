@@ -1,105 +1,164 @@
-using System.Globalization;
-using System.Security.Cryptography;
-using System.Xml.Serialization;
 using System;
-using System.IO;
-using System.Linq.Expressions;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Runtime.CompilerServices;
-using System.ComponentModel.Design.Serialization;
-
-
-class Program
+using System.Collections.Generic;
+/*We need to make view menu + we need to inherite from menu to get food id + to get the price of food to add them together for the receipt and change line 62 because I did the price = quantity until we get 
+the price*/
+public class Ordering
 {
-    public static bool login_toggler = false;
+    public int OrderID { get; set; }
+    public int Receipt { get; set; } 
+    public int TaxRate { get; set; }     
+    public int ServiceCharge { get; set; }
+    public string OrderDate { get; set; }
+    public List<OrderItem> OrderItems { get; set; }
 
-    static void Main(string[] args)
+    public Ordering(int orderID, int receipt, int taxRate, int serviceCharge, string orderDate)
     {
-        if (login_toggler)
+        OrderID = orderID;
+        Receipt = receipt;
+        TaxRate = taxRate;
+        ServiceCharge = serviceCharge;
+        OrderDate = orderDate;
+
+        // Initialize the OrderItems list
+        OrderItems = new List<OrderItem>();
+    }
+
+    public class OrderItem
+    {
+        public int ItemId { get; set; }
+        public int Quantity { get; set; }
+
+        public OrderItem(int itemId, int quantity)
         {
-            Console.WriteLine("Welcome to the Restaurant Management System\n");
+            ItemId = itemId;
+            Quantity = quantity;
+        }
+    }
 
-            LoginManager loginManager = new LoginManager();
+    public void AddOrderItem(int itemId, int quantity)
+    {
+        // Add a new OrderItem object to the OrderItems list
+        OrderItems.Add(new OrderItem(itemId, quantity));
+    }
 
-            // Prompt for login
-            Console.Write("Enter username: ");
-            string username = Console.ReadLine();
-            Console.Write("Enter password: ");
-            string password = Console.ReadLine();
-
-            if (loginManager.ValidateLogin(username, password))
-            {
-                Console.WriteLine("Login successful!");
-                RunRestaurantManagement();
-            }
-            else
-            {
-                Console.WriteLine("Login failed. Please check your username and password.");
-            }
+    public void EditOrderItemQuantity(int itemId, int newQuantity)
+    {
+        // Find the OrderItem object with the specified itemId
+        OrderItem item = OrderItems.Find(i => i.ItemId == itemId);
+        if (item != null)
+        {
+            item.Quantity = newQuantity;
         }
         else
         {
-            Console.WriteLine("Login successful!");
-            RunRestaurantManagement();
+            Console.WriteLine("Item not found.");
         }
     }
 
-
-
-
-    static void RunRestaurantManagement()
+    public int CalculateTax()
     {
-        Menu menu = new Menu();
-        Ordering order = new Ordering();
-        Manager ahmed = new Manager(1, "manager", "ahmed", 20, "cairo", "01111111", 8, "night", 12, 0);
-        Customer customer=new Customer(); 
-        Reservations resreve = new Reservations();
-
-        bool isRunning = true;
-        while (isRunning)
-        {       
-                int choice;
-                do
-                {
-                    Console.WriteLine("1. Manage Menu");
-                    Console.WriteLine("2. Customer Management");
-                    Console.WriteLine("3. Place an Order");
-                    Console.WriteLine("4. Manage Staff");
-                    Console.WriteLine("5. Reservation Managment");
-                    Console.WriteLine("6. Exit");
-                    Console.Write("Enter your choice >> ");
-                    if (!int.TryParse(Console.ReadLine(), out choice))
-                    {
-                        Console.WriteLine("Please enter a valid number.\n");
-                        continue;
-                    }
-
-                    switch (choice)
-                    {
-                        case 1:
-                            menu.MenuManagement();
-                            break;
-                        case 2:
-                        customer.CustomerManagement();
-                        break;
-                        case 3:
-                        order.OrderingManagement();
-                            // Placeholder for placing an order
-                            //Console.WriteLine("Order placement not yet implemented.\n");
-                            break;
-                        case 4:
-                            ahmed.ManagerManagement();
-                            break;
-                        case 5:
-                        resreve.ReservationManagement();
-                            break;
-                        default:
-                            Console.WriteLine("Invalid option, please try again.\n");
-                            break;
-                    }
-                } while (choice != 4);
+        int subtotal = 0;
+        foreach (var item in OrderItems)
+        {
+            subtotal += item.Quantity; // assuming the quantity is the price of the item
         }
+        return subtotal * TaxRate / 100;
     }
 
+    public int CalculateTotalCost()
+    {
+        int subtotal = 0;
+        foreach (var item in OrderItems)
+        {
+            subtotal += item.Quantity; // assuming the quantity is the price of the item <--------- Need changing to price
+        }
+        return subtotal + (subtotal * TaxRate / 100) + ServiceCharge;
+    }
 
+    public void PrintOrderDetails()
+    {
+        Console.WriteLine($"Order ID: {OrderID}");
+        Console.WriteLine($"Order Items: {OrderItems}");
+        Console.WriteLine($"Receipt: {Receipt}");
+        Console.WriteLine($"Tax Rate: {TaxRate}%");
+        Console.WriteLine($"Service Charge: {ServiceCharge}");
+        Console.WriteLine($"Order Date: {OrderDate}");
+        Console.WriteLine($"Tax: {CalculateTax()}");
+        Console.WriteLine($"Total Cost: {CalculateTotalCost()}");
+    }
+
+    public void OrderingManagement()
+    {
+        bool continueRunning = true;
+        while (continueRunning)
+        {
+            Console.WriteLine("Select an option:");
+             Console.WriteLine("1. View Menu");
+            Console.WriteLine("2. To Order");//To write the food id and the quantity
+            Console.WriteLine("3. To Edit Order Quantity");//To edit the order (To change quantity)
+            Console.WriteLine("4. Reciept");
+            Console.WriteLine("5. Exit");
+
+            string option = Console.ReadLine();
+            switch (option)
+            {
+               /* case "1"
+                    To View the menu
+                    break;*/
+                case "2":
+                    Console.Write("Please Enter The Food Id: ");
+                    string itemIdStr = Console.ReadLine();
+                    if (int.TryParse(itemIdStr, out int itemId))
+                    {
+                        Console.Write("Please enter the quantity: ");
+                        string quantityStr = Console.ReadLine();
+                        if (int.TryParse(quantityStr, out int quantity))
+                        {
+                            AddOrderItem(itemId, quantity);
+                            Console.WriteLine("Order added.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid quantity.");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid food Id.");
+                    }
+                    break;
+                case "3":
+                    Console.Write("Please enter the food Id: ");
+                    string editItemIdStr = Console.ReadLine();
+                    if (int.TryParse(editItemIdStr, out int editItemId))
+                    {
+                        Console.Write("Please enter the new quantity: ");
+                        string newQuantityStr = Console.ReadLine();
+                        if (int.TryParse(newQuantityStr, out int newQuantity))
+                        {
+                            EditOrderItemQuantity(editItemId, newQuantity);
+                            Console.WriteLine("Order quantity updated.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid quantity.");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid food Id.");
+                    }
+                    break;
+                case "4":
+                    PrintOrderDetails();
+                    break;
+                case "5":
+                    continueRunning = false;  // Sets the flag to false to exit the loop.
+                    break;
+                default:
+                    Console.WriteLine("Invalid option, please try again.");
+                    break;
+            }
+        }
+    }
 }
