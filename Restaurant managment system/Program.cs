@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Security.Cryptography;
 using System.Xml.Serialization;
 using System;
@@ -41,7 +41,7 @@ class Program
     static void RunRestaurantManagement()
     {
         Menu menu = new Menu();
-        Ordering order = new();
+        Ordering order = new Ordering();
         Manager ahmed = new Manager(1, "manager", "ahmed", 20, "cairo", "01111111", 8, "night", 12, 0);
         Customer customer=new Customer(); 
 
@@ -72,8 +72,9 @@ class Program
                         customer.CustomerManagement();
                         break;
                         case 3:
+                        order.OrderingManagement();
                             // Placeholder for placing an order
-                            Console.WriteLine("Order placement not yet implemented.\n");
+                            //Console.WriteLine("Order placement not yet implemented.\n");
                             break;
                         case 4:
                             ahmed.ManagerManagement();
