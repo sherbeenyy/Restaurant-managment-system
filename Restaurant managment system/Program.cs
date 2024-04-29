@@ -14,25 +14,39 @@ class Program
     static void Main(string[] args)
     {
 
-        Console.WriteLine("Welcome to the Restaurant Management System\n\n");
+        Console.WriteLine("Welcome to the Restaurant Management System\n");
 
+        LoginManager loginManager = new LoginManager();
+
+        // Prompt for login
+        Console.Write("Enter username: ");
+        string username = Console.ReadLine();
+        Console.Write("Enter password: ");
+        string password = Console.ReadLine();
+
+        if (loginManager.ValidateLogin(username, password))
+        {
+            Console.WriteLine("Login successful!");
+            RunRestaurantManagement();
+        }
+        else
+        {
+            Console.WriteLine("Login failed. Please check your username and password.");
+        }
+    }
+
+
+
+
+    static void RunRestaurantManagement()
+    {
         Menu menu = new Menu();
         Ordering order = new();
         Manager ahmed = new Manager(1, "manager", "ahmed", 20, "cairo", "01111111", 8, "night", 12, 0);
 
         bool isRunning = true;
         while (isRunning)
-        {
-            Console.WriteLine("Please log in:");
-            Console.Write("Username: ");
-            string username = Console.ReadLine();
-            Console.Write("Password: ");
-            string password = Console.ReadLine();
-
-            // Simple credential checking
-            if (username == "admin" && password == "admin")
-            {
-                Console.WriteLine("Login successful!\n");
+        {       
                 int choice;
                 do
                 {
@@ -50,7 +64,7 @@ class Program
                     switch (choice)
                     {
                         case 1:
-                            menu.MenuMangemnet();
+                            menu.MenuManagement();
                             break;
                         case 2:
                             // Placeholder for placing an order
@@ -68,12 +82,8 @@ class Program
                             break;
                     }
                 } while (choice != 4);
-            }
-            else
-            {
-                Console.WriteLine("Invalid username or password. Please try again.\n");
-            }
         }
     }
+
 
 }

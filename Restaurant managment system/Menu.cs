@@ -34,44 +34,45 @@ public class Menu
    private List<MenuItem> menuItems = new List<MenuItem>(); // create a list of menu items named menuItems
 
 // testing in the main function
-    public void MenuMangemnet()
+   public void MenuManagement()
+{
+    LoadItemsFromFile();  // Load items when the program starts
+    bool continueRunning = true;
+    while (continueRunning)
     {
-        LoadItemsFromFile();  // Load items when the program starts
-        bool continueRunning = true;
-        while (continueRunning)
-        {
-            Console.WriteLine("1. Add new item");
-            Console.WriteLine("2. Edit item by ID");
-            Console.WriteLine("3. View Menu");
-            Console.WriteLine("4. Remove item by ID");
-            Console.WriteLine("5. Exit");
-            Console.Write(">> ");
-            string option = Console.ReadLine();
-            Console.WriteLine("==================");
+        Console.WriteLine("1. Add new item");
+        Console.WriteLine("2. Edit item by ID");
+        Console.WriteLine("3. View Menu");
+        Console.WriteLine("4. Remove item by ID");
+        Console.WriteLine("5. Exit");
+        Console.Write(">> ");
+        string option = Console.ReadLine();
+        Console.WriteLine("==================");
 
-            switch (option)
-            {
-                case "1":
-                    AddNewItem();
-                    break;
-                case "2":
-                    EditErorrHandler();
-                    break;
-                case "3":
-                    ViewItems();
-                    break;
-                case "4":
-                    RemoveItem();
-                    break;
-                case "5":
-                    continueRunning = false;  // Sets the flag to false to exit the loop.
-                    break;
-                default:
-                    Console.WriteLine("Invalid option, please try again.");
-                    break;
-            }
+        switch (option)
+        {
+            case "1":
+                AddNewItem();
+                break;
+            case "2":
+                EditErorrHandler();
+                break;
+            case "3":
+                ViewItems();
+                break;
+            case "4":
+                RemoveItem();
+                break;
+            case "5":
+                continueRunning = false;
+                Console.WriteLine("Exiting menu management.");
+                break;
+            default:
+                Console.WriteLine("Invalid option, please try again.");
+                break;
         }
     }
+}
 
     // function to add new item to the menu from the user
     public void AddNewItem()
@@ -244,7 +245,6 @@ public class Menu
                 {
                     Console.WriteLine("Invalid input please input a number starting from 1.");
                     Console.WriteLine(e.Message);
-
                 }
    }
     public virtual void ViewItems()

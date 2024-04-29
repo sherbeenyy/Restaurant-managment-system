@@ -22,6 +22,10 @@ public class Manager : Employee
         {
             _expYears = expYears;
         }
+    // default constructor
+    public Manager() : base()
+    {
+        }
 
     public List<Employee> employees = new List<Employee>(); //data strcuter like the array but easier to add and delete ;
 
