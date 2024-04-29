@@ -92,15 +92,19 @@ public class Ordering
         while (continueRunning)
         {
             Console.WriteLine("Select an option:");
-            Console.WriteLine("1. To Order");//To write the food id and the quantity
-            Console.WriteLine("2. To Edit Order Quantity");//To edit the order (To change quantity)
-            Console.WriteLine("3. Reciept");
-            Console.WriteLine("4. Exit");
+             Console.WriteLine("1. View Menu");
+            Console.WriteLine("2. To Order");//To write the food id and the quantity
+            Console.WriteLine("3. To Edit Order Quantity");//To edit the order (To change quantity)
+            Console.WriteLine("4. Reciept");
+            Console.WriteLine("5. Exit");
 
             string option = Console.ReadLine();
             switch (option)
             {
-                case "1":
+               /* case "1"
+                    To View the menu
+                    break;*/
+                case "2":
                     Console.Write("Please enter the food Id: ");
                     string itemIdStr = Console.ReadLine();
                     if (int.TryParse(itemIdStr, out int itemId))
@@ -122,7 +126,7 @@ public class Ordering
                         Console.WriteLine("Invalid food Id.");
                     }
                     break;
-                case "2":
+                case "3":
                     Console.Write("Please enter the food Id: ");
                     string editItemIdStr = Console.ReadLine();
                     if (int.TryParse(editItemIdStr, out int editItemId))
@@ -144,10 +148,10 @@ public class Ordering
                         Console.WriteLine("Invalid food Id.");
                     }
                     break;
-                case "3":
+                case "4":
                     PrintOrderDetails();
                     break;
-                case "4":
+                case "5":
                     continueRunning = false;  // Sets the flag to false to exit the loop.
                     break;
                 default:
