@@ -31,7 +31,7 @@ public class Manager : Employee
 
         List<string> AllowedRoles = new List<string>
         {
-            "chief","delivery", "waiter,cleaner,cashier,Chief","Delivery", "Waiter","Cashier,Cleaner"
+            "chief","delivery", "waiter","cleaner","cashier","Chief","Delivery", "Waiter","Cashier","Cleaner"
         };
 
         List<string> AllowedShifts = new List<string>
