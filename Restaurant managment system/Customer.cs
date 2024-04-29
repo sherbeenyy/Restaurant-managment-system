@@ -18,7 +18,7 @@ public class Customer
         Name = name;
         PhoneNumber = phoneNumber;
         Address = address;
-        LoyaltyPoints = 0;
+        LoyaltyPoints=+2;
     }
     public  Customer()
     {
@@ -130,8 +130,8 @@ public class Customer
 
         Console.Write("Enter customer address: ");
         string Address = Console.ReadLine();
-
-        AddLoyaltyPoints(2); // Add 2 loyalty points for each entry to change loyalty points change the number 2
+        AddLoyaltyPoints(2);
+ // Add 2 loyalty points for each entry to change loyalty points change the number 2
         customers.Add(new Customer(Name, PhoneNumber, Address));
     }
 
@@ -139,6 +139,7 @@ public class Customer
     {
         LoyaltyPoints += points;
     }
+    
 
 
     public void DisplayCustomer(string phone)
