@@ -147,7 +147,9 @@ public class Customer
     Customer person = customers.FirstOrDefault(x => x.PhoneNumber == phone);
     if (person != null)
     {
-        Console.WriteLine($"Name: {person.Name}, Phone Number: {person.PhoneNumber}, Address: {person.Address}, Loyalty Points: {person.LoyaltyPoints}");
+        Console.WriteLine("============Customer List===========");
+        Console.WriteLine($"Name: {person.Name}\nPhone Number: {person.PhoneNumber}\nAddress: {person.Address}\nLoyalty Points: {person.LoyaltyPoints}\n");
+        Console.WriteLine("============");
     }
     else
     {
@@ -170,8 +172,28 @@ public void Displayall()
     }
 }
     // file handeling code 
+    public void LoadItemsFromFile()
+    {
+        string path = @"E:\programming\Project\Restaurant-managment-system\Files\Customer.json";
 
-    
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path); // Read JSON content from the file
+            customers = JsonConvert.DeserializeObject<List<Customer>>(json) ?? new List<Customer>(); // Deserialize JSON to List<MenuItem>
+        }
+        else
+        {
+            customers = new List<Customer>(); // Initialize empty list if file doesn't exist
+        }
+    }
+    public void SaveItemsToFile()
+    {
+        string path = @"E:\programming\Project\Restaurant-managment-system\Files\Customer.json";
+        string json = JsonConvert.SerializeObject(customers, Formatting.Indented); // Serialize list to JSON
+        File.WriteAllText(path, json); // Write JSON content to the file
+    }
+
+
 }
 
 

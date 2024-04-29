@@ -12,6 +12,7 @@ using System.Threading.Tasks;
     public Owner(int id, string role, string name, int age, string address, string phoneNumber, decimal workingHours, string shift, decimal wage, float expYears)
     : base(id, role, name, age, address, phoneNumber, workingHours, shift, wage, expYears)
     {
+
     }
 
     // default constructor
@@ -47,12 +48,16 @@ using System.Threading.Tasks;
     public void SetupOwnerCredentials()
     {
         Console.WriteLine("======================");
+        Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("WE HAVE REALIZED THIS IS YOUR FRIST TIME RUNNUNG THE WEB TIME TO SET UP YOUR ACCOUNT");
+        Console.ResetColor();
         Console.WriteLine("Setting up new Owner account.");
+        Console.ForegroundColor= ConsoleColor.Yellow;
         Console.Write("Enter your username: ");
         string username = Console.ReadLine();
         Console.Write("Enter your password: ");
         string password = Console.ReadLine();
+        Console.ResetColor();
 
         Credentials credentials = new Credentials { Username = username };
         credentials.SetPassword(password);  // Hash the password

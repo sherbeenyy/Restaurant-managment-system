@@ -11,27 +11,36 @@ using System.ComponentModel.Design.Serialization;
 
 class Program
 {
+    public static bool login_toggler = false;
+
     static void Main(string[] args)
     {
-
-        Console.WriteLine("Welcome to the Restaurant Management System\n");
-
-        LoginManager loginManager = new LoginManager();
-
-        // Prompt for login
-        Console.Write("Enter username: ");
-        string username = Console.ReadLine();
-        Console.Write("Enter password: ");
-        string password = Console.ReadLine();
-
-        if (loginManager.ValidateLogin(username, password))
+        if (login_toggler)
         {
-            Console.WriteLine("Login successful!");
-            RunRestaurantManagement();
+            Console.WriteLine("Welcome to the Restaurant Management System\n");
+
+            LoginManager loginManager = new LoginManager();
+
+            // Prompt for login
+            Console.Write("Enter username: ");
+            string username = Console.ReadLine();
+            Console.Write("Enter password: ");
+            string password = Console.ReadLine();
+
+            if (loginManager.ValidateLogin(username, password))
+            {
+                Console.WriteLine("Login successful!");
+                RunRestaurantManagement();
+            }
+            else
+            {
+                Console.WriteLine("Login failed. Please check your username and password.");
+            }
         }
         else
         {
-            Console.WriteLine("Login failed. Please check your username and password.");
+            Console.WriteLine("Login successful!");
+            RunRestaurantManagement();
         }
     }
 
@@ -72,7 +81,7 @@ class Program
                         customer.CustomerManagement();
                         break;
                         case 3:
-                        order.OrderingManagement();
+                        //order.OrderingManagement();
                             // Placeholder for placing an order
                             //Console.WriteLine("Order placement not yet implemented.\n");
                             break;

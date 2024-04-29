@@ -33,7 +33,7 @@ public class Ordering
     {
     }
 
-public void OrderingManagement()
+/*public void OrderingManagement()
 {
     bool continueRunning = true;
     while (continueRunning)
@@ -75,7 +75,7 @@ public void OrderingManagement()
                 break;
         }
     }
-}
+}*/
     // method to calculate the tax based on the order items and tax rate
 
     public int CalculateTax()
