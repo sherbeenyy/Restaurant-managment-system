@@ -13,105 +13,67 @@ class Program
 {
     static void Main(string[] args)
     {
-      
-        // Employee calss testing 
-        /*   Employee ahmed = new Employee(1, "chef", "ahmed", 20, "cairo", "01111111", 12, 0);
-          Employee ashraf = new Employee(1, "chef", "ashraf", 20, "cairo", "01111111", 12, 0);
-          Employee osama = new Employee(1, "cashier", "osama", 20, "cairo", "01111111", 12, 0);
 
-
-
-          ahmed.displayInfo();
-
-          Owner Mohamed = new Owner(1, "owner", "Mohamed", 20, "cairo", "01111111", 12, 0, 0);
-          Mohamed.hire(ahmed);
-          Mohamed.hire(ashraf);
-          Mohamed.hire(osama);
-          Manager ashrafm = Mohamed.promoteToManager(ashraf);
-          Console.WriteLine("Managers: ");
-          Mohamed.printManagers();
-          Console.WriteLine("Employees: ");
-          Mohamed.printEmployees();
-          ashrafm.hire(ahmed); */
-
-        // seralization testing 
-
-        
-
-        // Menu class testing and ordering testing 
-
-
-        Console.WriteLine("\n------------Menu testing and ordering ---------------\n");
+        Console.WriteLine("Welcome to the Restaurant Management System\n\n");
 
         Menu menu = new Menu();
         Ordering order = new();
-        Manager ahmed = new Manager(1, "manager", "ahmed", 20, "cairo", "01111111", 8, "night",12 ,0);
+        Manager ahmed = new Manager(1, "manager", "ahmed", 20, "cairo", "01111111", 8, "night", 12, 0);
 
-        Console.WriteLine("Welcome to the restaurant management system\n\n");
-        while (true)
-        { 
-        Console.WriteLine("1. change the menu items");
-        Console.WriteLine("2. Place an order");
-        Console.WriteLine("3. Owner stuff");
-        Console.WriteLine("4. Exit");
-        Console.Write(">> ");
-        int Choice = int.Parse(Console.ReadLine());
-            switch (Choice)
+        bool isRunning = true;
+        while (isRunning)
+        {
+            Console.WriteLine("Please log in:");
+            Console.Write("Username: ");
+            string username = Console.ReadLine();
+            Console.Write("Password: ");
+            string password = Console.ReadLine();
+
+            // Simple credential checking
+            if (username == "admin" && password == "admin")
             {
-                case 1:
-                        menu.MenuMangemnet();
-                    break;
-                case 2:
-                    // Place Order
-
-                    break;
-                case 3:
-                    ahmed.ManagerManagement();
-                    break;
-                case 4:
-                    return;
-                default:
-                    Console.WriteLine("Invalid option, please try again.\n");
-                    break;
-            }
-
-        }
-
-
-        /*Employee emp1 = new Employee(0,"waiter","mazen",22,"cairo","010140132",12,1);
-        emp1.displayInfo();*/
-
-        //Anas Customer part:
-        /*Customer customer = new Customer("", "", "");
-        customer.ReadInput();
-         customer.DisplayCustomer();*/
-
-
-        //Anas ordering part
-              /*  while (true)
+                Console.WriteLine("Login successful!\n");
+                int choice;
+                do
                 {
-                    order.ViewItems();
-                    int selection = order.GetUserSelection();
-
-                    if (selection > 0)
+                    Console.WriteLine("1. Manage Menu");
+                    Console.WriteLine("2. Place an Order");
+                    Console.WriteLine("3. Manage Staff");
+                    Console.WriteLine("4. Exit");
+                    Console.Write("Enter your choice >> ");
+                    if (!int.TryParse(Console.ReadLine(), out choice))
                     {
-                        switch (selection)
-                        {
-                            case 1:
-                                // Place Order
-                                break;
-                            case 2:
-                                // View Order History
-                                break;
-                            case 3:
-                                // Exit
-                                return;
-                            default:
-                                break;
-      
+                        Console.WriteLine("Please enter a valid number.\n");
+                        continue;
                     }
-               }*/
-        
+
+                    switch (choice)
+                    {
+                        case 1:
+                            menu.MenuMangemnet();
+                            break;
+                        case 2:
+                            // Placeholder for placing an order
+                            Console.WriteLine("Order placement not yet implemented.\n");
+                            break;
+                        case 3:
+                            ahmed.ManagerManagement();
+                            break;
+                        case 4:
+                            Console.WriteLine("Exiting...");
+                            isRunning = false;
+                            break;
+                        default:
+                            Console.WriteLine("Invalid option, please try again.\n");
+                            break;
+                    }
+                } while (choice != 4);
+            }
+            else
+            {
+                Console.WriteLine("Invalid username or password. Please try again.\n");
+            }
+        }
     }
 
 }
