@@ -83,7 +83,7 @@ class Program
                         customer.CustomerManagement();
                         break;
                         case 3:
-                        //order.OrderingManagement();
+                        order.OrderingManagement();
                             // Placeholder for placing an order
                             //Console.WriteLine("Order placement not yet implemented.\n");
                             break;
