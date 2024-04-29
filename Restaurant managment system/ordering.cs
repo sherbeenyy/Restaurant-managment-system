@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 /*We need to make view menu + we need to inherite from menu to get food id + to get the price of food to add them together for the receipt and change line 62 because I did the price = quantity until we get 
-the price*/
+the price+ if everything is working well*/
 public class Ordering
 {
     public int OrderID { get; set; }
