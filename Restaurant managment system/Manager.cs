@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Linq;
@@ -31,7 +31,7 @@ public class Manager : Employee
 
         List<string> AllowedRoles = new List<string>
         {
-            "chef","delivery", "waiter","cashier"
+            "chief","delivery", "waiter,cleaner,cashier,Chief","Delivery", "Waiter","Cashier,Cleaner"
         };
 
         List<string> AllowedShifts = new List<string>
