@@ -9,29 +9,30 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-// from my understanding in order to save data from the method we have learened the class
-// we are creating a list from needs to be sepreate as indvisuals 
-public class CustomerItem
-{
-    public string Name { get; set; }
-    public string PhoneNumber { get; set; }
-    public string Address { get; set; }
-    public int LoyaltyPoints { get; set; }
-
-    public CustomerItem(string name, string phoneNumber, string address)
-    {
-        Name = name;
-        PhoneNumber = phoneNumber;
-        Address = address;
-        LoyaltyPoints = +2;
-    }
 
 
-}
 
 public class Customer
 {
+    // from my understanding in order to save data from the method we have learened the class
+    // we are creating a list from needs to be sepreate as indvisuals 
+    public class CustomerItem
+    {
+        public string Name { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Address { get; set; }
+        public int LoyaltyPoints { get; set; }
 
+        public CustomerItem(string name, string phoneNumber, string address)
+        {
+            Name = name;
+            PhoneNumber = phoneNumber;
+            Address = address;
+            LoyaltyPoints = +2;
+        }
+
+
+    }
 
     private List<CustomerItem> customers = new List<CustomerItem>(); // create a list of customers names customers
     public void CustomerManagement()

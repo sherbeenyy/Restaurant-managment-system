@@ -144,25 +144,6 @@ public class Manager : Employee
             else Console.WriteLine("you are not authorized to do this action");
         }
 
-    public void LoadItemsFromFile() // Load employees from JSON file
-    {
-        string path = @"E:\programming\Project\Restaurant-managment-system\Files\employee.json";
-        if (File.Exists(path))
-        {
-            string json = File.ReadAllText(path);
-            employees = JsonConvert.DeserializeObject<List<Employee>>(json) ?? new List<Employee>(); // Deserialize json to List<Employee>, if null create new List
-        }
-    }
-
-    public void SaveItemsToFile()
-    {
-        string json = JsonConvert.SerializeObject(employees, Formatting.Indented);
-        Console.WriteLine("Debug - Serialized JSON: " + json);  // Check the serialized output
-
-        string path = @"E:\programming\Project\Restaurant-managment-system\Files\employee.json";
-        File.WriteAllText(path, json);
-    }
-
         public void ManagerManagement()
     {
         LoadItemsFromFile();
@@ -201,5 +182,22 @@ public class Manager : Employee
                     break;
             }
         }
+    }
+
+    private const string path = "Employees.json";
+    public void LoadItemsFromFile() // Load employees from JSON file
+    {
+
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            employees = JsonConvert.DeserializeObject<List<Employee>>(json) ?? new List<Employee>(); // Deserialize json to List<Employee>, if null create new List
+        }
+    }
+
+    public void SaveItemsToFile()
+    {
+        string json = JsonConvert.SerializeObject(employees, Formatting.Indented);
+        File.WriteAllText(path, json);
     }
 }

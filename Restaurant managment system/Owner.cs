@@ -49,7 +49,7 @@ using System.Threading.Tasks;
     {
         Console.WriteLine("======================");
         Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("WE HAVE REALIZED THIS IS YOUR FRIST TIME RUNNUNG THE WEB TIME TO SET UP YOUR ACCOUNT");
+        Console.WriteLine("WE HAVE REALIZED THIS IS YOUR FRIST TIME RUNNUNG THE APP TIME TO SET UP YOUR ACCOUNT");
         Console.ResetColor();
         Console.WriteLine("Setting up new Owner account.");
         Console.ForegroundColor= ConsoleColor.Yellow;

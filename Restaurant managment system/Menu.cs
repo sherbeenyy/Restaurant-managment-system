@@ -31,7 +31,7 @@ public class MenuItem
 
 public class Menu
 {
-   private List<MenuItem> menuItems = new List<MenuItem>(); // create a list of menu items named menuItems
+   public List<MenuItem> menuItems = new List<MenuItem>(); // create a list of menu items named menuItems
 
 // testing in the main function
    public void MenuManagement()
@@ -251,8 +251,7 @@ public class Menu
             Console.WriteLine($"ID: {item.FoodId} , Name: {item.FoodName} , Description: {item.FoodDescription} , Price: {item.FoodPrice} , Category: {item.FoodCategory}\n ");
         }  
         Console.WriteLine("==================");
-     
-       
+    
     }
 
     private const string path = "Menu.json";
