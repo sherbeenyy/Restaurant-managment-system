@@ -83,6 +83,20 @@ public class Customer
         Console.WriteLine("Enter customer details: ");
         ReadInput();
     }
+     public void ReadInput()
+    {
+        Console.Write("Enter customer name: ");
+       string  Name = Console.ReadLine();
+
+        Console.Write("Enter customer phone number: ");
+        string PhoneNumber = Console.ReadLine();
+
+        Console.Write("Enter customer address: ");
+        string Address = Console.ReadLine();
+        // Add 2 loyalty points for each entry to change loyalty points change the number 2
+        customers.Add(new CustomerItem(Name, PhoneNumber, Address));
+        SaveItemsToFile();
+    }
 
     // Edit customers
     public void EditCustomerInfo(string phone)
@@ -119,20 +133,7 @@ public class Customer
         }
         SaveItemsToFile();
     }
-    public void ReadInput()
-    {
-        Console.Write("Enter customer name: ");
-       string  Name = Console.ReadLine();
-
-        Console.Write("Enter customer phone number: ");
-        string PhoneNumber = Console.ReadLine();
-
-        Console.Write("Enter customer address: ");
-        string Address = Console.ReadLine();
-        // Add 2 loyalty points for each entry to change loyalty points change the number 2
-        customers.Add(new CustomerItem(Name, PhoneNumber, Address));
-        SaveItemsToFile();
-    }
+   
 
     public void DisplayCustomer(string phone)
 {
