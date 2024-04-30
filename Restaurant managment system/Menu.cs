@@ -255,10 +255,9 @@ public class Menu
        
     }
 
+    private const string path = "Menu.json";
     public void LoadItemsFromFile()
     {
-        string path = @"C:\Users\mazen\OneDrive\Desktop\test\OOP project\Restaurant-managment-system\Restaurant managment system\files\menu.json";
-
         if (File.Exists(path))
         {
             string json = File.ReadAllText(path); // Read JSON content from the file
@@ -271,7 +270,6 @@ public class Menu
     }
     public void SaveItemsToFile()
     {
-        string path = @"C:\Users\mazen\OneDrive\Desktop\test\OOP project\Restaurant-managment-system\Restaurant managment system\files\menu.json";
         string json = JsonConvert.SerializeObject(menuItems, Formatting.Indented); // Serialize list to JSON
         File.WriteAllText(path, json); // Write JSON content to the file
     }

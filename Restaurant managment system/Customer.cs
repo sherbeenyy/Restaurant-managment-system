@@ -167,10 +167,10 @@ public void Displayall()
     }
 }
     // file handeling code 
+
+    private const string path = "Customers.json";
     public void LoadItemsFromFile()
     {
-        string path = @"C:\Users\mazen\OneDrive\Desktop\test\OOP project\Restaurant-managment-system\Restaurant managment system\files\help.json";
-
         if (File.Exists(path))
         {
             string json = File.ReadAllText(path); // Read JSON content from the file
@@ -183,7 +183,6 @@ public void Displayall()
     }
     public void SaveItemsToFile()
     {
-        string path = @"C:\Users\mazen\OneDrive\Desktop\test\OOP project\Restaurant-managment-system\Restaurant managment system\files\help.json";
         string json = JsonConvert.SerializeObject(customers, Formatting.Indented); // Serialize list to JSON
         File.WriteAllText(path, json); // Write JSON content to the file
     }
