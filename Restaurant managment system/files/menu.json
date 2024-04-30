@@ -12,5 +12,12 @@
     "FoodPrice": 100.0,
     "FoodCategory": "food",
     "FoodId": 2
+  },
+  {
+    "FoodName": "pizza",
+    "FoodDescription": "super",
+    "FoodPrice": 10.0,
+    "FoodCategory": "good",
+    "FoodId": 3
   }
 ]

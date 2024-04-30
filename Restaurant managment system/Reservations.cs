@@ -1,111 +1,168 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
+// DayInWeek class to represent the days in the week
+public class DayInWeek
+{
+    public string DayName { get; set; }
+    public List<Table> Tables { get; private set; } // List to hold tables for each day
 
-public class Reservations
+    public DayInWeek(string dayName)
     {
+        DayName = dayName;
+        Tables = new List<Table>(); // Initialize the list of tables
+    }
 
-
-
-
-
-    public List<List<int>> tables = new List<List<int>>();
-
-    private Dictionary<string, List<int>> reservedTableMap;
-
-    private Dictionary<string, int> dicforDays;
-
-
-
-    
-
-
-    // only owner can do this 
-    public void initTables( )
+    public void AddTable(Table table)
     {
-        Console.WriteLine("Enter the days of the weeks");
-        Console.Write(">>");
-        int daysInTheWeek = int.Parse(Console.ReadLine());
-        Console.WriteLine("Enter the number of tables");
-        Console.Write(">>");
-        
-      
-        
-      int tablescount = int.Parse(Console.ReadLine());
-        for (int i = 0; i < tablescount; i++)
-        {
-            tables.Add(new List<int>(daysInTheWeek));
-        }
+        Tables.Add(table); // Method to add a table to the day
     }
 
     public void DisplayTables()
     {
-        foreach (var innerList in tables)
+        foreach (var table in Tables)
         {
-            Console.Write("table: ");
-            foreach (var item in innerList)
-            {
-                Console.Write(item + " ");
-            }
-            Console.WriteLine();
-        };
+            string status = table.IsOccupied ? "Occupied" : table.IsReserved ? "Reserved" : "Available";
+            Console.WriteLine($"Table Number: {table.TableNumber}, Status: {status}");
+        }
+    }
+}
+
+// Table class to represent the tables in the restaurant
+public class Table
+{
+    public int TableNumber { get; set; }
+    public bool IsReserved { get; set; }
+    public bool IsOccupied { get; set; }
+
+    public Table(int tableNumber)
+    {
+        TableNumber = tableNumber;
+        IsReserved = false;
+        IsOccupied = false;
+    }
+}
+
+
+
+// main class for the reservation system
+
+public class Reservations
+    {
+    private string Name { get; set; }
+    private string PhoneNumber { get; set; }
+    private string Address { get; set; }
+    private int NumberOfPeople { get; set; }
+    private DateTime ReservationTime { get; set; }
+
+    public Reservations(string name, string phoneNumber, string address, int numberOfPeople, DateTime reservationTime)
+    {
+        Name = name;
+        PhoneNumber = phoneNumber;
+        Address = address;
+        NumberOfPeople = numberOfPeople;
+        ReservationTime = reservationTime;
     }
 
-    public void reserveTable()
-    {
-        List<int> list = new List<int>();
-        Console.WriteLine("Enter your phone number");
-        Console.Write(">>");
-        string phoneNumber = Console.ReadLine();
-        Console.WriteLine("Enter the day you wish to book on");
-        Console.Write(">>");
-        int day = int.Parse(Console.ReadLine());
-        Console.WriteLine("Enter the table number");
-        Console.Write(">>");
-        int tableNumber = int.Parse(Console.ReadLine());
 
-        for (int i =0;i < tables.Count;i++)
+    private List<DayInWeek> days = new List<DayInWeek>();// list of days in the week 
+
+    public Reservations()
+    {
+
+    }
+
+    private Dictionary<string, int> dicforDays;
+
+
+    // only owner can do this 
+    public void InitDaysAndTables()
+    {
+        Console.WriteLine("Enter the days of the week your restaurant will be open:");
+        int daysCount = int.Parse(Console.ReadLine());
+        for (int i = 0; i < daysCount; i++)
         {
-            if (tables[day][tableNumber] == 1)
+            Console.WriteLine("Enter the day name:");
+            string dayName = Console.ReadLine();
+            var day = new DayInWeek(dayName);
+            days.Add(day);
+
+            Console.WriteLine("Enter the number of tables for " + dayName + ":");
+            int tableCount = int.Parse(Console.ReadLine());
+            for (int j = 0; j < tableCount; j++)
             {
-                Console.WriteLine("sorry this table already reserved for someone else");
-            }else
-            {
-                tables[day][tableNumber] = 1;
-                list.Add(day);
-                list.Add(tableNumber);
-                reservedTableMap.Add(phoneNumber, list);
-                Console.WriteLine("reserved successfully");
+                day.AddTable(new Table(j + 1)); // Creates tables with sequential numbers
             }
         }
     }
 
-    public void cancelReservation()
+    // Display tables for a specific day
+    public void DisplayTables()
     {
+        Console.WriteLine("Enter the day to display tables:");
+        string dayName = Console.ReadLine();
+        var day = days.FirstOrDefault(d => d.DayName.Equals(dayName, StringComparison.OrdinalIgnoreCase));
+        if (day == null)
+        {
+            Console.WriteLine("Day not found.");
+            return;
+        }
+        day.DisplayTables();
+    }
 
-        Console.WriteLine("Enter your phone number");
-        Console.Write(">>");
-        string phoneNumber = Console.ReadLine();
-        Console.WriteLine("Enter the day you wish to book on");
-        Console.Write(">>");
-        int day = int.Parse(Console.ReadLine());
-        Console.WriteLine("Enter the table number");
-        Console.Write(">>");
+    public void ReserveOrCancelTable(bool isReserve)
+    {
+        Console.WriteLine("Enter the day:");
+        string dayName = Console.ReadLine();
+        var day = days.FirstOrDefault(d => d.DayName.Equals(dayName, StringComparison.OrdinalIgnoreCase));
+        if (day == null)
+        {
+            Console.WriteLine("Day not found.");
+            return;
+        }
+
+        Console.WriteLine("Enter the table number:");
         int tableNumber = int.Parse(Console.ReadLine());
-        if (tables[day][tableNumber] == 0)
-            Console.WriteLine("you didn't book that table ! ");
+        var table = day.Tables.FirstOrDefault(t => t.TableNumber == tableNumber);
+        if (table == null)
+        {
+            Console.WriteLine("Table number not found.");
+            return;
+        }
+
+        if (isReserve)
+        {
+            if (table.IsReserved || table.IsOccupied)
+            {
+                Console.WriteLine("Table is not available.");
+            }
+            else
+            {
+                table.IsReserved = true;
+                Console.WriteLine("Table reserved successfully.");
+            }
+        }
         else
         {
-            tables[day][tableNumber] = 0;
-            reservedTableMap.Remove(phoneNumber);
-            Console.WriteLine("you have unbooked the table successfully !");
+            if (!table.IsReserved)
+            {
+                Console.WriteLine("Table is not reserved.");
+            }
+            else
+            {
+                table.IsReserved = false;
+                Console.WriteLine("Reservation cancelled successfully.");
+            }
         }
     }
-    public void reservationManagment()
+
+
+public void reservationManagment()
     {
         bool continueRunning = true;
         while (continueRunning)
@@ -123,13 +180,13 @@ public class Reservations
             {
                 case "1":
                     
-                    initTables();
+                    InitDaysAndTables();
                     break;
                 case "2":
-                    reserveTable();
+                    ReserveOrCancelTable(true);
                     break;
                 case "3":
-                    cancelReservation();
+                    ReserveOrCancelTable(false);
                     break;
                 case "4":
                     DisplayTables();
@@ -144,25 +201,9 @@ public class Reservations
             }
         }
     }
-    private string Name { get; set; }
-        private string PhoneNumber { get; set; }
-        private string Address { get; set; }
-        private int NumberOfPeople { get; set; }
-        private DateTime ReservationTime { get; set; }
-
-        public Reservations(string name, string phoneNumber, string address, int numberOfPeople, DateTime reservationTime)
-    {
-            Name = name;
-            PhoneNumber = phoneNumber;
-            Address = address;
-            NumberOfPeople = numberOfPeople;
-            ReservationTime = reservationTime;
-        }
+       
 
     // Defualt constructor
-    public Reservations()
-    {
-    }
 
         public void AddReservation()
     {
@@ -188,46 +229,5 @@ public class Reservations
         }
 
     // testing in the main function
-
-    public void ReservationManagement()
-    {
-        bool continueRunning = true;
-        while (continueRunning)
-        {
-            Console.WriteLine("1. Add new Reservation");
-            Console.WriteLine("2. Remove Reservation");
-            Console.WriteLine("3. View Reservations");
-            Console.WriteLine("4. Edit Reservation");
-            Console.WriteLine("5. Exit");
-            Console.Write(">> ");
-            string option = Console.ReadLine();
-            Console.WriteLine("==================");
-
-            switch (option)
-            {
-                case "1":
-                    AddReservation();
-                    break;
-                case "2":
-                    
-                    break;
-                case "3":
-                    
-                    break;
-
-                case "4":
-                    break;
-                case "5":
-                    continueRunning = false;  // Sets the flag to false to exit the loop.
-                    break;
-                default:
-                    Console.WriteLine("Invalid option, please try again.");
-                    break;
-            }
-        }
-    }
-
-
-
 }
 

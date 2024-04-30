@@ -10,8 +10,6 @@ using System.Security.Cryptography;
 // class to store login credtionls 
 public class LoginManager
 {
-    private const string CredentialsPath = "credentials.json";
-
     public Credentials CurrentCredentials { get; private set; }
 
     public LoginManager()
@@ -23,6 +21,7 @@ public class LoginManager
         }
     }
 
+    private const string CredentialsPath = "credentials.json";
     public bool LoadCredentials()
     {
         if (File.Exists(CredentialsPath))

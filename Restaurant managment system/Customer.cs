@@ -7,31 +7,39 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-public class Customer
-{
-    private string Name { get; set; }
-    private string PhoneNumber { get; set; }
-    private string Address { get; set; }
-    private int LoyaltyPoints { get;  set; }
 
-    public Customer(string name, string phoneNumber, string address)
+
+// from my understanding in order to save data from the method we have learened the class
+// we are creating a list from needs to be sepreate as indvisuals 
+public class CustomerItem
+{
+    public string Name { get; set; }
+    public string PhoneNumber { get; set; }
+    public string Address { get; set; }
+    public int LoyaltyPoints { get; set; }
+
+    public CustomerItem(string name, string phoneNumber, string address)
     {
         Name = name;
         PhoneNumber = phoneNumber;
         Address = address;
-        LoyaltyPoints=+2;
-    }
-    public  Customer()
-    {
-
+        LoyaltyPoints = +2;
     }
 
-     
-     public void CustomerManagement()
+
+}
+
+public class Customer
 {
-    bool continueRunning = true;
-    while (continueRunning)
-    {
+
+
+    private List<CustomerItem> customers = new List<CustomerItem>(); // create a list of customers names customers
+    public void CustomerManagement()
+{
+    LoadItemsFromFile();
+        bool continueRunning = true;
+        while (continueRunning)
+        {
         Console.WriteLine("Select an option:");
         Console.WriteLine("1. Add Customer");
         Console.WriteLine("2. Edit Customer");
@@ -70,10 +78,6 @@ public class Customer
         }
     }
 }
-    
-    
-
-    private List<Customer> customers = new List<Customer>(); // create a list of customers names customers
 
     // add customers 
 
@@ -86,13 +90,14 @@ public class Customer
     // Edit customers
     public void EditCustomerInfo(string phone)
     {
-        Customer person = customers.FirstOrDefault(x => x.PhoneNumber == phone);
+        CustomerItem person = customers.FirstOrDefault(x => x.PhoneNumber == phone);
         if (person != null)
         {
-            Console.WriteLine("what do you wish to edit ? " +
+            Console.WriteLine("what do you wish to edit ?\n " +
                 "1. Name\n" +
                 "2. PhoneNumber\n" +
                 "3. Address\n");
+            Console.Write(">>");
 
             int choice = Convert.ToInt32(Console.ReadLine());
             switch (choice)
@@ -115,11 +120,7 @@ public class Customer
             }
 
         }
-        else
-        {
-            Console.WriteLine("there is no person");
-        }
-
+        SaveItemsToFile();
     }
     public void ReadInput()
     {
@@ -131,21 +132,14 @@ public class Customer
 
         Console.Write("Enter customer address: ");
         string Address = Console.ReadLine();
-        AddLoyaltyPoints(2);
- // Add 2 loyalty points for each entry to change loyalty points change the number 2
-        customers.Add(new Customer(Name, PhoneNumber, Address));
+        // Add 2 loyalty points for each entry to change loyalty points change the number 2
+        customers.Add(new CustomerItem(Name, PhoneNumber, Address));
+        SaveItemsToFile();
     }
-
-    public void AddLoyaltyPoints(int points)
-    {
-        LoyaltyPoints += points;
-    }
-    
-
 
     public void DisplayCustomer(string phone)
 {
-    Customer person = customers.FirstOrDefault(x => x.PhoneNumber == phone);
+    CustomerItem person = customers.FirstOrDefault(x => x.PhoneNumber == phone);
     if (person != null)
     {
         Console.WriteLine("============Customer List===========");
@@ -175,26 +169,24 @@ public void Displayall()
     // file handeling code 
     public void LoadItemsFromFile()
     {
-        string path = @"E:\programming\Project\Restaurant-managment-system\Files\Customer.json";
+        string path = @"C:\Users\mazen\OneDrive\Desktop\test\OOP project\Restaurant-managment-system\Restaurant managment system\files\help.json";
 
         if (File.Exists(path))
         {
             string json = File.ReadAllText(path); // Read JSON content from the file
-            customers = JsonConvert.DeserializeObject<List<Customer>>(json) ?? new List<Customer>(); // Deserialize JSON to List<MenuItem>
+            customers = JsonConvert.DeserializeObject<List<CustomerItem>>(json) ?? new List<CustomerItem>(); // Deserialize JSON to List<MenuItem>
         }
         else
         {
-            customers = new List<Customer>(); // Initialize empty list if file doesn't exist
+            customers = new List<CustomerItem>(); // Initialize empty list if file doesn't exist
         }
     }
     public void SaveItemsToFile()
     {
-        string path = @"E:\programming\Project\Restaurant-managment-system\Files\Customer.json";
+        string path = @"C:\Users\mazen\OneDrive\Desktop\test\OOP project\Restaurant-managment-system\Restaurant managment system\files\help.json";
         string json = JsonConvert.SerializeObject(customers, Formatting.Indented); // Serialize list to JSON
         File.WriteAllText(path, json); // Write JSON content to the file
     }
-
-
 }
 
 

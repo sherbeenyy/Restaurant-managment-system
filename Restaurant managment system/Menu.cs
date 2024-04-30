@@ -131,6 +131,11 @@ public class Menu
 
     }
 
+    public void Createitem(MenuItem item)
+    {
+        menuItems.Add(item);
+    }
+
 
     // remove item from list by id
     public void RemoveItem()
@@ -158,16 +163,6 @@ public class Menu
             Console.WriteLine("Item not found.");
         }
     }
-
-
-    // add item to the list
-    public void Createitem(MenuItem item)
-    {
-        menuItems.Add(item);
-    }
-
-        
-
 
     // edit item by id
     public void EditItem(int id)
@@ -262,7 +257,7 @@ public class Menu
 
     public void LoadItemsFromFile()
     {
-        string path = @"E:\programming\Project\Restaurant-managment-system\Files\menu.json";
+        string path = @"C:\Users\mazen\OneDrive\Desktop\test\OOP project\Restaurant-managment-system\Restaurant managment system\files\menu.json";
 
         if (File.Exists(path))
         {
@@ -276,7 +271,7 @@ public class Menu
     }
     public void SaveItemsToFile()
     {
-        string path = @"E:\programming\Project\Restaurant-managment-system\Files\menu.json";
+        string path = @"C:\Users\mazen\OneDrive\Desktop\test\OOP project\Restaurant-managment-system\Restaurant managment system\files\menu.json";
         string json = JsonConvert.SerializeObject(menuItems, Formatting.Indented); // Serialize list to JSON
         File.WriteAllText(path, json); // Write JSON content to the file
     }
