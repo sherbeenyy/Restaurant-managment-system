@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using static Ordering;
 /*Function that make remove order, ask for customer info,if info does not exist create customer info finally use the small percentage of subtotal and added to customer
- loyalty points */
+ loyaltypoints*/
 
 public class Ordering : Menu
 {

@@ -1,4 +1,3 @@
-/*Need to check that everything is working*/
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,14 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
-
-
-
 public class Customer
 {
     // from my understanding in order to save data from the method we have learened the class
-    // we are creating a list from needs to be sepreate as indvisuals 
+    // we are creating a list from needs to be sepreate as indivisuals
     public class CustomerItem
     {
         public string Name { get; set; }
