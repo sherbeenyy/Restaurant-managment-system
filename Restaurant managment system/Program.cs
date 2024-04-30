@@ -60,17 +60,21 @@ class Program
         int choice;
         do
         {
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("=======Restaurant Functions=========");
             Console.WriteLine("1. Manage Menu");
-            Console.WriteLine("2. Customer Management");
-            Console.WriteLine("3. Place an Order");
-            Console.WriteLine("4. Manage Staff");
-            Console.WriteLine("5. Reservation Managment");
+            Console.WriteLine("2. Manage Customers");
+            Console.WriteLine("3. Manage Orders");
+            Console.WriteLine("4. Manage Employees");
+            Console.WriteLine("5. Manage Reservations");
             Console.WriteLine("6. Exit");
+            Console.ResetColor();
             Console.Write("Enter your choice >> ");
             if (!int.TryParse(Console.ReadLine(), out choice))
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Please enter a valid number.\n");
+                Console.ResetColor();
                 continue;
             }
 
@@ -97,7 +101,9 @@ class Program
                         
                     break;
                 default:
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Invalid option, please try again.\n");
+                    Console.ResetColor();
                     break;
             }
         } 

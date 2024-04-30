@@ -40,22 +40,24 @@ public class Menu
     bool continueRunning = true;
     while (continueRunning)
     {
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine("========Menu Management========");
         Console.WriteLine("1. Add new item");
         Console.WriteLine("2. Edit item by ID");
         Console.WriteLine("3. View Menu");
         Console.WriteLine("4. Remove item by ID");
         Console.WriteLine("5. Exit");
+        Console.ResetColor();
+
         Console.Write(">> ");
         string option = Console.ReadLine();
-        Console.WriteLine("==================");
-
         switch (option)
         {
             case "1":
                 AddNewItem();
                 break;
             case "2":
-                EditErorrHandler();
+                EditItem();
                 break;
             case "3":
                 ViewItems();
@@ -65,10 +67,15 @@ public class Menu
                 break;
             case "5":
                 continueRunning = false;
+                SaveItemsToFile(); // Save items when the program exits
+                Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("Exiting menu management.");
+                Console.ResetColor();
                 break;
             default:
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Invalid option, please try again.");
+                Console.ResetColor();
                 break;
         }
     }
@@ -77,47 +84,36 @@ public class Menu
     // function to add new item to the menu from the user
     public void AddNewItem()
     {
+        Console.WriteLine("=========Creating New Item============");
 
-         Console.Write("Enter item name: ");
-        string name = Console.ReadLine();
+         string name = InputValidator.ReadString("Enter item name: ");
 
-        Console.Write("Enter item description: ");
-        string description = Console.ReadLine();
+        string description = InputValidator.ReadString("Enter item description: ");
+       
+        decimal price = InputValidator.ReadDecimal("Enter item price: ");
 
-        Console.Write("Enter item price: ");
-        decimal price;
-
-        while (!decimal.TryParse(Console.ReadLine(), out price))
-        {
-            Console.WriteLine("Invalid input for price. Please enter a decimal value.");
-            Console.Write("Enter item price: ");
-        }
-
-        Console.Write("Enter item category: ");
-        string category = Console.ReadLine();
+        string category = InputValidator.ReadString("Enter item category: ");
 
         // Ask the user for a unique id for the item
 
         bool isUnique = false;
         int foodId;
         do
-    {
-        Console.Write("Enter item id: ");
-        while (!int.TryParse(Console.ReadLine(), out foodId))
         {
-            Console.WriteLine("Invalid input for ID. Please enter an integer value.");
-            Console.Write("Enter item id: ");
-        }
+            foodId = InputValidator.ReadInt("Enter a unique ID for the item: ");
 
-        // Check if the foodId is unique
+            // Check if the foodId is unique
 
-        isUnique = !menuItems.Any(x => x.FoodId == foodId);
-        if (!isUnique)
-        {
-            Console.WriteLine($"An item with ID {foodId} already exists. Please enter a unique ID.");
-        }
-    } while (!isUnique);
-        
+            isUnique = !menuItems.Any(x => x.FoodId == foodId);
+            if (!isUnique)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"An item with ID {foodId} already exists.");
+                Console.ResetColor();
+                Console.WriteLine("Please enter a different ID;");
+            }
+        } while (!isUnique);
+
         // Create a new MenuItem object with the user input
 
         var newItem = new MenuItem(name, description, price, category,foodId);
@@ -127,7 +123,9 @@ public class Menu
         Createitem(newItem);// .add is a built in function in list to add new items 
         SaveItemsToFile();
 
+        Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine("\nNew item added successfully.\n");
+        Console.ResetColor();
 
     }
 
@@ -136,49 +134,49 @@ public class Menu
         menuItems.Add(item);
     }
 
-
     // remove item from list by id
     public void RemoveItem()
     {
-        Console.WriteLine("Enter the ID of the item you want to remove:");
-        Console.Write(">> ");
-        string input = Console.ReadLine();
-        int id;
-
-        if (!int.TryParse(input, out id))
-        {
-            Console.WriteLine("Invalid input. Please enter a valid integer for ID.");
-            return; // Early return to avoid further processing
-        }
+       int id = InputValidator.ReadInt("Enter the ID of the item you want to remove: ");
 
         var item = menuItems.FirstOrDefault(x => x.FoodId == id);
         if (item != null)
         {
             menuItems.Remove(item); // Remove the item from the list
             SaveItemsToFile();      // Save the current state of list to file
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine($"Item removed successfully: {item.FoodName}");
+            Console.ResetColor();
         }
         else
         {
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Item not found.");
+            Console.ResetColor();
         }
     }
 
     // edit item by id
-    public void EditItem(int id)
+    public void EditItem()
     {
+       int id = InputValidator.ReadInt("Enter the ID of the item you want to edit: ");
 
         // Find item by id and edit it
         MenuItem item = menuItems.FirstOrDefault(x => x.FoodId == id);
         if (item != null)
         {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("=======Editing Item========");
             Console.WriteLine("what do you wish to edit ?\n" +
                 "1. Name\n" +
                 "2. Description\n" +
                 "3. Price\n" +
                 "4. Category\n" +
                 "5. All");
-            int choice = Convert.ToInt32(Console.ReadLine());
+            Console.ResetColor();
+            Console.Write(">>");
+            int choice = InputValidator.ReadInt("Enter your choice: ");
             switch (choice)
             {
                 case 1:
@@ -186,72 +184,53 @@ public class Menu
                     item.FoodName = Console.ReadLine();
                     break;
                 case 2:
-                    Console.WriteLine("Enter new description: ");
-                    item.FoodDescription = Console.ReadLine();
+                   item.FoodDescription = InputValidator.ReadString("Enter new description: ");
                     break;
                 case 3:
-                    Console.WriteLine("Enter new price: ");
-                    item.FoodPrice = Convert.ToDecimal(Console.ReadLine());
+                    item.FoodPrice = InputValidator.ReadDecimal("Enter new price: ");
                     break;
                 case 4:
-                    Console.WriteLine("Enter new category: ");
-                    item.FoodCategory = Console.ReadLine();
+                   item.FoodCategory = InputValidator.ReadString("Enter new category: ");
                     break;
                 case 5:
                     EditAll(item);
                     break;
                 default:
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Invalid choice");
+                    Console.ResetColor();
                     break;
             }
             
         }
         else
         {
-            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Item not found\n");
-            Console.WriteLine("==================================");
+            Console.ResetColor();
         }
         SaveItemsToFile();
     }
 
     private void EditAll(MenuItem item)
     {
-        Console.WriteLine("Enter new name: ");
-        item.FoodName = Console.ReadLine();
-        Console.WriteLine("Enter new description: ");
-        item.FoodDescription = Console.ReadLine();
-        Console.WriteLine("Enter new price: ");
-        item.FoodPrice = Convert.ToDecimal(Console.ReadLine());
-        Console.WriteLine("Enter new category: ");
-        item.FoodCategory = Console.ReadLine();
+        item.FoodName = InputValidator.ReadString("Enter new name: ");
+        item.FoodDescription = InputValidator.ReadString("Enter new description: ");
+        item.FoodPrice = InputValidator.ReadDecimal("Enter new price: ");
+        item.FoodCategory = InputValidator.ReadString("Enter new category: ");
     }
 
-   private void EditErorrHandler()
-   {
-        try
-                {
-                    Console.WriteLine("Enter the id of the item you want to edit ? : ");
-                    Console.Write(">> ");
-            int id = int.Parse(Console.ReadLine());
-                    EditItem(id);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Invalid input please input a number starting from 1.");
-                    Console.WriteLine(e.Message);
-                }
-   }
+   
     public virtual void ViewItems()
     {
-        Console.WriteLine("Welcome to the Menu!");
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine("=======Welcome to the Menu=====\n");
+        Console.ResetColor();
 
         foreach (var item in menuItems)
         {
-            Console.WriteLine($"ID: {item.FoodId} , Name: {item.FoodName} , Description: {item.FoodDescription} , Price: {item.FoodPrice} , Category: {item.FoodCategory}\n ");
+            Console.WriteLine($"ID: {item.FoodId}, Name: {item.FoodName}, Description: {item.FoodDescription}, Price: {item.FoodPrice}, Category: {item.FoodCategory}\n ");
         }  
-        Console.WriteLine("==================");
-    
     }
 
     private const string path = "Menu.json";

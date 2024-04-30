@@ -243,20 +243,29 @@ public class Manager : Employee
         }
     }
 
-    private const string path = "Employees.json";
-    public void LoadItemsFromFile() // Load employees from JSON file
-    {
+    private const string folderPath = "Files";
+    private const string filePath = "Employees.json";
+    private string fullPath => Path.Combine(folderPath, filePath);
 
-        if (File.Exists(path))
+    public void LoadItemsFromFile()
+    {
+        if (File.Exists(fullPath))
         {
-            string json = File.ReadAllText(path);
-            employees = JsonConvert.DeserializeObject<List<Employee>>(json) ?? new List<Employee>(); // Deserialize json to List<Employee>, if null create new List
+            string json = File.ReadAllText(fullPath);
+            employees = JsonConvert.DeserializeObject<List<Employee>>(json) ?? new List<Employee>();
+        }
+        else
+        {
+            Console.WriteLine("No previous employee data found.");
         }
     }
 
     public void SaveItemsToFile()
     {
+        // Ensure the directory exists
+        Directory.CreateDirectory(folderPath);
+
         string json = JsonConvert.SerializeObject(employees, Formatting.Indented);
-        File.WriteAllText(path, json);
+        File.WriteAllText(fullPath, json);
     }
 }
