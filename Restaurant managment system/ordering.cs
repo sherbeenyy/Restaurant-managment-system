@@ -9,8 +9,8 @@ public class Ordering : Menu
     // variables for Ordering 
     public int OrderID { get; set; }
     public int Receipt { get; set; }
-    public int TaxRate { get; set; }
-    public int ServiceCharge { get; set; }
+    public int TaxRate = 14;
+    public int ServiceCharge = 50;
     public DateTime OrderDate { get; set; }
     
     public decimal Subtotal { get; set; }
@@ -74,16 +74,16 @@ public class Ordering : Menu
             OrderItems.Add(item);
             CalculateSubtotal();
         }
-        private void CalculateSubtotal()
+        public void CalculateSubtotal()
         {
             Subtotal = OrderItems.Sum(item =>
             {
                 var menuItem = menuItems.FirstOrDefault(m => m.FoodId == item.ItemId);
-                return menuItem != null ? menuItem.FoodPrice * item.Quantity : 0;
+                return menuItem != null ? menuItem.FoodPrice * item.Quantity  : 0;
             });
         }
 
-        // display the orders method
+// display the orders method
         public void DisplayOrders()
         {
             Console.WriteLine($"Order ID: {OrderID}");
@@ -103,9 +103,6 @@ public class Ordering : Menu
             Console.WriteLine($"Subtotal for this Order: {Subtotal}");
         }
     }
-
-
-
 
 
 
@@ -151,52 +148,148 @@ public class Ordering : Menu
         }
     }
 
-    public void EditOrderItemQuantity(int itemId, int newQuantity)
+    private void EditExistingOrder() //  to modify specific order
     {
-        // Find the OrderItem object with the specified itemId
-        OrderItem item = OrderItems.Find(i => i.ItemId == itemId);
-        if (item != null)
+        ViewOrders(); // Display all orders for user to choose from
+        Console.WriteLine("Enter the Order ID you want to edit:"); // we enter the order id not item id
+        if (int.TryParse(Console.ReadLine(), out int orderId))
         {
-            item.Quantity = newQuantity;
+            var order = allOrders.FirstOrDefault(o => o.OrderID == orderId);// it search for the order id that we entered
+            if (order != null)
+            {
+                Console.WriteLine("Editing Order ID: " + orderId);
+                bool editing = true;
+                while (editing)
+                {
+                    Console.WriteLine("1. Add new item");
+                    Console.WriteLine("2. Edit item quantity");
+                    Console.WriteLine("3. Finish editing");
+                    string editChoice = Console.ReadLine();
+                    switch (editChoice)
+                    {
+                        case "1":
+                            AddItemToOrder(order);// to add extra stuff in order (line 301)
+                            break;
+                        case "2":
+                            EditItemQuantityInOrder(order); //we edit an item quantity (line 331)
+                            break;
+                        case "3":
+                            editing = false;
+                            break;
+                        default:
+                            Console.WriteLine("Invalid option, try again.");
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("Order ID not found.");
+            }
         }
         else
         {
-            Console.WriteLine("Item not found.");
+            Console.WriteLine("Invalid input for Order ID.");
         }
     }
 
-    public int CalculateTax()
+    private void AddItemToOrder(OrderList order) //to add items in order
     {
-        TaxRate=14;//<------TaxRate can be change anytime we want
-        int subtotal = 0;
-        foreach (var item in OrderItems)
+        Console.WriteLine("Enter item ID: ");
+        if (int.TryParse(Console.ReadLine(), out int itemId))
         {
-            subtotal += item.Quantity; // assuming the quantity is the price of the item
+            var menuItem = menuItems.FirstOrDefault(x => x.FoodId == itemId);
+            if (menuItem != null)
+            {
+                Console.WriteLine("Enter quantity of item:");
+                if (int.TryParse(Console.ReadLine(), out int quantity))
+                {
+                    order.AddItem(new OrderItem(itemId, quantity));
+                    Console.WriteLine("Item added successfully.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Item ID not found in menu.");
+            }
         }
-        return subtotal * TaxRate / 100;
+        else
+        {
+            Console.WriteLine("Invalid item ID.");
+        }
     }
 
-    public int CalculateTotalCost()
+    private void EditItemQuantityInOrder(OrderList order)// To edit the order qunatity
     {
-        ServiceCharge=50;//<------ServiceCharge can be change anytime we want
-        int subtotal = 0;
-        foreach (var item in OrderItems)
+        Console.WriteLine("Enter item ID to edit quantity:");
+        if (int.TryParse(Console.ReadLine(), out int itemId))
         {
-            subtotal += item.Quantity; // assuming the quantity is the price of the item
+            var item = order.OrderItems.FirstOrDefault(i => i.ItemId == itemId);
+            if (item != null)
+            {
+                Console.WriteLine("Current quantity: " + item.Quantity);
+                Console.WriteLine("Enter new quantity:");
+                if (int.TryParse(Console.ReadLine(), out int newQuantity))
+                {
+                    item.Quantity = newQuantity;
+                    order.CalculateSubtotal(); // Recalculate subtotal after editing quantity
+                    Console.WriteLine("Quantity updated successfully.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Item ID not found in the order.");
+            }
         }
-        return subtotal + (subtotal * TaxRate / 100) + ServiceCharge;
+        else
+        {
+            Console.WriteLine("Invalid item ID.");
+        }
     }
 
     public void PrintOrderDetails()
     {
-        Console.WriteLine($"Order ID: {OrderID}");
-        Console.WriteLine($"Order Items: {OrderItems}");
-        Console.WriteLine($"Receipt: {Receipt}");
-        Console.WriteLine($"Tax Rate: {TaxRate}%");
-        Console.WriteLine($"Service Charge: {ServiceCharge}");
-        Console.WriteLine($"Order Date: {OrderDate}");
-        Console.WriteLine($"Tax: {CalculateTax()}");
-        Console.WriteLine($"Total Cost: {CalculateTotalCost()}");
+        ViewOrders(); // Display all orders for user to choose from
+        Console.WriteLine("Enter the Order ID for which you want the receipt:");
+        if (int.TryParse(Console.ReadLine(), out int orderId))
+        {
+            var order = allOrders.FirstOrDefault(o => o.OrderID == orderId);
+            if (order != null)
+            {
+                OrderDate = DateTime.Now; // Update the order date to the current date
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"========Printing receipt for Order ID: {orderId}===========");
+                Console.ResetColor();
+                
+                Console.WriteLine($"Order Date: {OrderDate.ToString("yyyy-MM-dd HH:mm:ss")}");
+                Console.WriteLine("Ordered Items:");
+                foreach (var item in order.OrderItems)
+                {
+                    var menuItem = menuItems.FirstOrDefault(m => m.FoodId == item.ItemId);
+                    if (menuItem != null)
+                    {
+                        decimal totalCost = menuItem.FoodPrice * item.Quantity;
+                        Console.WriteLine($"Item Name: {menuItem.FoodName}, Quantity: {item.Quantity}, Price per Item: {menuItem.FoodPrice}, Total Cost: {totalCost}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Item ID {item.ItemId} not found in menu.");
+                    }
+                }
+                Console.WriteLine($"Subtotal for this Order: {order.Subtotal}");
+                Console.WriteLine($"Service Charge: {ServiceCharge}");
+                Console.WriteLine($"Tax Rate: {TaxRate}%");
+                Console.WriteLine($"Total Cost: {order.Subtotal + ServiceCharge + (order.Subtotal * TaxRate / 100)}");
+                }
+            else
+            {
+                Console.WriteLine("Order ID not found.");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Invalid input for Order ID.");
+        }
     }
 
     public void ViewOrders()
@@ -214,19 +307,18 @@ public class Ordering : Menu
             Console.WriteLine(); // Adds a line for better readability between orders
         }
     }
-public void OrderingManagement()
+    public void OrderingManagement()
     {
         LoadItemsFromFile();
         bool continueRunning = true;
         while (continueRunning)
         {
-
-            Console.WriteLine("============ORDER PLACMENT========");
-             Console.WriteLine("1. View Menu");
-            Console.WriteLine("2. Create Order");//To write the food id and the quantity
-            Console.WriteLine("3. To Edit Order Quantity");//To edit the order (To change quantity)
-            Console.WriteLine("4. Receipt");
-            Console.WriteLine("5. ViewOrders");
+            Console.WriteLine("============ ORDER PLACEMENT ========");
+            Console.WriteLine("1. View Menu");
+            Console.WriteLine("2. Create Order");
+            Console.WriteLine("3. Edit Existing Order");
+            Console.WriteLine("4. Print Receipt");
+            Console.WriteLine("5. View All Orders");
             Console.WriteLine("6. Exit");
 
             string option = Console.ReadLine();
@@ -234,41 +326,21 @@ public void OrderingManagement()
             {
                 case "1":
                     ViewItems();
-                    //To View the menu
                     break;
                 case "2":
                     AddOrderItem();
                     break;
                 case "3":
-                    Console.Write("Please enter the food Id: ");
-                    string editItemIdStr = Console.ReadLine();
-                    if (int.TryParse(editItemIdStr, out int editItemId))
-                    {
-                        Console.Write("Please enter the new quantity: ");
-                        string newQuantityStr = Console.ReadLine();
-                        if (int.TryParse(newQuantityStr, out int newQuantity))
-                        {
-                            EditOrderItemQuantity(editItemId, newQuantity);
-                            Console.WriteLine("Order quantity updated.");
-                        }
-                        else
-                        {
-                            Console.WriteLine("Invalid quantity.");
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Invalid food Id.");
-                    }
+                    EditExistingOrder();
                     break;
                 case "4":
-                    PrintOrderDetails();
+                    PrintOrderDetails(); // Ensure this function prints details of all orders or let user select an order
                     break;
                 case "5":
                     ViewOrders();
                     break;
                 case "6":
-                    continueRunning = false;  // Sets the flag to false to exit the loop.
+                    continueRunning = false; // Exit the loop
                     break;
                 default:
                     Console.WriteLine("Invalid option, please try again.");
@@ -276,4 +348,7 @@ public void OrderingManagement()
             }
         }
     }
+
+   
+
 }

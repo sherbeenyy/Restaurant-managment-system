@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using Newtonsoft.Json;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateAndTime.Workdays;
 
 // DayInWeek class to represent the days in the week
 public class DayInWeek
@@ -77,28 +79,42 @@ public class Reservations
 
     }
 
-    private Dictionary<string, int> dicforDays;
-
-
     // only owner can do this 
     public void InitDaysAndTables()
     {
-        Console.WriteLine("Enter the days of the week your restaurant will be open:");
-        int daysCount = int.Parse(Console.ReadLine());
+        Console.WriteLine("Enter the number of days in the week your restaurant will be open:");
+        if (!int.TryParse(Console.ReadLine(), out int daysCount) || daysCount <= 0)
+        {
+            Console.WriteLine("Invalid input. Please enter a valid number of days.");
+            return;
+        }
+
         for (int i = 0; i < daysCount; i++)
         {
             Console.WriteLine("Enter the day name:");
             string dayName = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(dayName))
+            {
+                Console.WriteLine("Invalid day name. Please enter a valid name.");
+                continue;
+            }
+
             var day = new DayInWeek(dayName);
             days.Add(day);
 
-            Console.WriteLine("Enter the number of tables for " + dayName + ":");
-            int tableCount = int.Parse(Console.ReadLine());
+            Console.WriteLine($"Enter the number of tables for {dayName}:");
+            if (!int.TryParse(Console.ReadLine(), out int tableCount) || tableCount <= 0)
+            {
+                Console.WriteLine("Invalid number of tables. Please enter a valid number.");
+                continue;
+            }
+
             for (int j = 0; j < tableCount; j++)
             {
                 day.AddTable(new Table(j + 1)); // Creates tables with sequential numbers
             }
         }
+        SaveItemsToFile();
     }
 
     // Display tables for a specific day
@@ -127,7 +143,12 @@ public class Reservations
         }
 
         Console.WriteLine("Enter the table number:");
-        int tableNumber = int.Parse(Console.ReadLine());
+        if (!int.TryParse(Console.ReadLine(), out int tableNumber))
+        {
+            Console.WriteLine("Invalid input. Please enter a valid table number.");
+            return;
+        }
+
         var table = day.Tables.FirstOrDefault(t => t.TableNumber == tableNumber);
         if (table == null)
         {
@@ -145,6 +166,7 @@ public class Reservations
             {
                 table.IsReserved = true;
                 Console.WriteLine("Table reserved successfully.");
+                SaveItemsToFile();
             }
         }
         else
@@ -157,13 +179,14 @@ public class Reservations
             {
                 table.IsReserved = false;
                 Console.WriteLine("Reservation cancelled successfully.");
+                SaveItemsToFile();
             }
         }
     }
 
-
-public void reservationManagment()
+    public void reservationManagment()
     {
+        LoadItemsFromFile();
         bool continueRunning = true;
         while (continueRunning)
         {
@@ -201,33 +224,25 @@ public void reservationManagment()
             }
         }
     }
-       
+    // file handeling 
 
-    // Defualt constructor
-
-        public void AddReservation()
+    private const string path = "Reservations.json";
+    public void LoadItemsFromFile()
     {
-            Console.Write("Enter customer name: ");
-            Name = Console.ReadLine();
-
-            Console.Write("Enter customer phone number: ");
-            PhoneNumber = Console.ReadLine();
-
-            Console.Write("Enter customer address: ");
-            Address = Console.ReadLine();
-
-            Console.Write("Enter number of people: ");
-            NumberOfPeople = Convert.ToInt32(Console.ReadLine());
-
-            Console.Write("Enter reservation time: ");
-            ReservationTime = Convert.ToDateTime(Console.ReadLine());
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path); // Read JSON content from the file
+            days = JsonConvert.DeserializeObject<List<DayInWeek>>(json) ?? new List<DayInWeek>(); // Deserialize JSON to List<MenuItem>
         }
-
-        public void DisplayReservation()
+        else
+        {
+            days = new List<DayInWeek>(); // Initialize empty list if file doesn't exist
+        }
+    }
+    public void SaveItemsToFile()
     {
-            Console.WriteLine($"Name: {Name}, Phone Number: {PhoneNumber}, Address: {Address}, Number of People: {NumberOfPeople}, Reservation Time: {ReservationTime}");
-        }
-
-    // testing in the main function
+        string json = JsonConvert.SerializeObject(days, Formatting.Indented); // Serialize list to JSON
+        File.WriteAllText(path, json); // Write JSON content to the file
+    }
 }
 
