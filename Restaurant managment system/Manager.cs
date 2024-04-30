@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using Newtonsoft.Json;
-
+// Add Edit employee <-----------------------------------------------------------------Case 3
 public class Manager : Employee
     {
         private float _expYears;
@@ -56,31 +56,39 @@ public class Manager : Employee
         if (isAuth)
         {
             Console.Write("Enter the employee role: ");
+            Console.WriteLine("Allowed roles are: chief, delivery, waiter, cleaner, cashier");
+            Console.Write(">> ");
             string role = Console.ReadLine();
 
             while (!AllowedRoles.Contains(role))
             {
                 Console.WriteLine("Invalid role, please try again.");
+                Console.Write(">> ");
                 role = Console.ReadLine();
             }
 
             Console.Write("Enter the employee name: ");
-            string name = Console.ReadLine();
-
-            Console.Write("Enter the employee age: ");
-            int  age = int.Parse(Console.ReadLine());
+            string name = Console.ReadLine(); 
+            Console.Write(">> ");
+             Console.Write("Enter the employee age: ");
+            Console.Write(">> ");
+            int age = int.Parse(Console.ReadLine());
             
 
             Console.Write("Enter the employee address: ");
+            Console.Write(">> ");
             string address = Console.ReadLine();
 
             Console.Write("Enter the employee phone number: ");
+            Console.Write(">> ");
             string phoneNumber = Console.ReadLine();
 
             Console.Write("Enter the employee working hours: ");
             decimal workingHours = decimal.Parse(Console.ReadLine());
 
             Console.Write("Enter the employee shift: ");
+            Console.WriteLine("Allowed shifts are: day, night");
+            Console.Write(">> ");
             string shift = Console.ReadLine();
 
             while (!AllowedShifts.Contains(shift))
@@ -90,6 +98,7 @@ public class Manager : Employee
             }
 
             Console.WriteLine("Enter employee wage: ");
+            Console.Write(">> ");
             decimal wage = decimal.Parse(Console.ReadLine());
 
 

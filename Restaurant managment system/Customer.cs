@@ -41,6 +41,7 @@ public class Customer
         bool continueRunning = true;
         while (continueRunning)
         {
+        Console.WriteLine("========Customer Management========");
         Console.WriteLine("Select an option:");
         Console.WriteLine("1. Add Customer");
         Console.WriteLine("2. Edit Customer");

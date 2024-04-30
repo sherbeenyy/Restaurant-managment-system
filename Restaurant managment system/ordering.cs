@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using static Ordering;
-/* + to get the price of food to add them together for the receipt and change line 62 because I did the price = quantity until we get 
-the price+ if everything is working well*/
+/*Function that make remove order, ask for customer info,if info does not exist create customer info finally use the small percentage of subtotal and added to customer
+ loyalty points */
 
 public class Ordering : Menu
 {
