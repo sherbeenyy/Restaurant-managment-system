@@ -1,4 +1,3 @@
-/*Need to check that everything is working*/
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,14 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
-
-
-
 public class Customer
 {
-    // from my understanding in order to save data from the method we have learned the class
-    // we are creating a list from needs to be sepreate as indvisuals 
+    // from my understanding in order to save data from the method we have learened the class
+    // we are creating a list from needs to be sepreate as indivisuals
     public class CustomerItem
     {
         public string Name { get; set; }
@@ -88,6 +83,20 @@ public class Customer
         Console.WriteLine("Enter customer details: ");
         ReadInput();
     }
+     public void ReadInput()
+    {
+        Console.Write("Enter customer name: ");
+       string  Name = Console.ReadLine();
+
+        Console.Write("Enter customer phone number: ");
+        string PhoneNumber = Console.ReadLine();
+
+        Console.Write("Enter customer address: ");
+        string Address = Console.ReadLine();
+        // Add 2 loyalty points for each entry to change loyalty points change the number 2
+        customers.Add(new CustomerItem(Name, PhoneNumber, Address));
+        SaveItemsToFile();
+    }
 
     // Edit customers
     public void EditCustomerInfo(string phone)
@@ -124,20 +133,7 @@ public class Customer
         }
         SaveItemsToFile();
     }
-    public void ReadInput()
-    {
-        Console.Write("Enter customer name: ");
-       string  Name = Console.ReadLine();
-
-        Console.Write("Enter customer phone number: ");
-        string PhoneNumber = Console.ReadLine();
-
-        Console.Write("Enter customer address: ");
-        string Address = Console.ReadLine();
-        // Add 2 loyalty points for each entry to change loyalty points change the number 2
-        customers.Add(new CustomerItem(Name, PhoneNumber, Address));
-        SaveItemsToFile();
-    }
+   
 
     public void DisplayCustomer(string phone)
 {
