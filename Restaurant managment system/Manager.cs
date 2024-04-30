@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using Newtonsoft.Json;
-// Add Edit employee <-----------------------------------------------------------------Case 3
+using static Customer;
+
 public class Manager : Employee
-    {
+{
         private float _expYears;
         private bool isAuth = true;
         public float ExpYears
@@ -22,9 +23,11 @@ public class Manager : Employee
         {
             _expYears = expYears;
         }
-    // default constructor
-    public Manager() : base()
-    {
+
+        // default constructor
+        public Manager() : base()
+        {
+
         }
 
     public List<Employee> employees = new List<Employee>(); //data strcuter like the array but easier to add and delete ;
@@ -38,76 +41,44 @@ public class Manager : Employee
          {
             "day","night","Day","Night"
          };
-        //searching in the list if the role exist 
-
-            public bool login(string username, string password)
-        {
-            if (username == "admin" && password == "admin")
-            {
-                isAuth = true;
-                return true;
-            }
-            return false;
-        }
 
     // hire employee
     public void hire()
     {
         if (isAuth)
         {
-            Console.Write("Enter the employee role: ");
+            Console.WriteLine("===========Creating Employee======");
             Console.WriteLine("Allowed roles are: chief, delivery, waiter, cleaner, cashier");
-            Console.Write(">> ");
-            string role = Console.ReadLine();
+            string role = InputValidator.ReadString("Enter the employee role: ");
 
             while (!AllowedRoles.Contains(role))
             {
                 Console.WriteLine("Invalid role, please try again.");
-                Console.Write(">> ");
-                role = Console.ReadLine();
+                role = InputValidator.ReadString(">> ");
             }
 
-            Console.Write("Enter the employee name: ");
-            string name = Console.ReadLine(); 
-            Console.Write(">> ");
-             Console.Write("Enter the employee age: ");
-            Console.Write(">> ");
-            int age = int.Parse(Console.ReadLine());
-            
-
-            Console.Write("Enter the employee address: ");
-            Console.Write(">> ");
-            string address = Console.ReadLine();
-
-            Console.Write("Enter the employee phone number: ");
-            Console.Write(">> ");
-            string phoneNumber = Console.ReadLine();
-
-            Console.Write("Enter the employee working hours: ");
-            decimal workingHours = decimal.Parse(Console.ReadLine());
-
-            Console.Write("Enter the employee shift: ");
+            string name = InputValidator.ReadString("Enter the employee name: ");
+            int age = InputValidator.ReadInt("Enter the employee age: ");
+            string address = InputValidator.ReadString("Enter the employee address: ");
+            string phoneNumber = InputValidator.ReadString("Enter the employee phone number: ");
+            decimal workingHours = InputValidator.ReadDecimal("Enter the employee working hours: ");
             Console.WriteLine("Allowed shifts are: day, night");
-            Console.Write(">> ");
-            string shift = Console.ReadLine();
+            string shift = InputValidator.ReadString("Enter the employee shift: ");
 
             while (!AllowedShifts.Contains(shift))
             {
                 Console.WriteLine("Invalid Shift, please try again.");
-                shift = Console.ReadLine();
+                shift = InputValidator.ReadString(">> ");
             }
 
-            Console.WriteLine("Enter employee wage: ");
-            Console.Write(">> ");
-            decimal wage = decimal.Parse(Console.ReadLine());
-
+            decimal wage = InputValidator.ReadDecimal("Enter employee wage: ");
 
 
             Employee newEmployee = new Employee(employees.Count + 1, role, name, age, address, phoneNumber, workingHours, shift, wage);
 
             employees.Add(newEmployee);
             SaveItemsToFile();
-            Console.WriteLine("Employee added successfully");
+            Console.WriteLine("=======Employee added successfully============");
         }
         else
         {
@@ -115,43 +86,123 @@ public class Manager : Employee
         }
     }
 
-    // print all employees info
-    public void printEmployees()
+    //Remove employee
+    public void fire()
     {
-            Console.WriteLine("+================Employees List========================");
-            
-        foreach (var item in employees)
+        if (isAuth)
         {
-                item.displayInfo();
-                Console.WriteLine("==================================");
-        }
-            
-    }
-        //Remove employee
-        public void fire()
-        {
-            if(isAuth)
-            {
-            Console.WriteLine("Enter the id of the Employee you want to remove : ");
-            Console.Write(">> ");   
-            int id = int.Parse(Console.ReadLine());
+           
+            int id = InputValidator.ReadInt("Enter the id of the employee you want to remove: ");
 
             // Find item by id and remove it
             Employee item = employees.FirstOrDefault(x => x.Id == id);
             if (item != null)
             {
-                Console.WriteLine("Item removed successfully." + item.Name);
-                employees.Remove(item);
-                SaveItemsToFile();
-            }
-            else
+                Console.WriteLine("are you sure yoy wish to remove Employee" + item.Name);
+                string answer = Console.ReadLine();
+                if (answer == "yes")
                 {
-                Console.WriteLine("Employee not found\n");
-                Console.WriteLine("==================================");
+                    Console.WriteLine("Employee removed successfully." + item.Name);
+                    employees.Remove(item);
+                    SaveItemsToFile();
+                }
+                else
+                {
+                    Console.WriteLine("Employee not removed.");
                 }
             }
-            else Console.WriteLine("you are not authorized to do this action");
+            else
+            {
+                Console.WriteLine("Employee not found\n");
+                Console.WriteLine("==================================");
+            }
         }
+        else Console.WriteLine("you are not authorized to do this action");
+    }
+
+    // Edit employee info
+    public void EditEmployeeInfo()
+    {
+        Console.WriteLine("===========Editing Employee======");
+        Console.WriteLine("Enter the id of the Employee you want to edit : ");
+        int Employee_Id = int.Parse(Console.ReadLine());
+
+        Employee person = employees.FirstOrDefault(x => x.Id == Employee_Id);
+        if (Employee_Id != null)
+        {
+            Console.WriteLine("what do you wish to edit ?\n" +
+                "1. Name\n" +
+                "2. Role\n" +
+                "3. Age\n" +
+                "4. Address\n" +
+                "5. PhoneNumber\n" +
+                "6. Working Hours\n" +
+                "7. Shift\n" +
+                "8. Wage\n");
+
+                Console.Write(">>");
+
+            int choice = Convert.ToInt32(Console.ReadLine());
+            switch(choice)
+            {
+                case 1:
+                   person.Name = InputValidator.ReadString("Enter new name: ");
+                    break;
+                case 2:
+                    person.Role = InputValidator.ReadString("Enter new Role: ");
+
+                    break;
+                case 3:
+                    person.Age = InputValidator.ReadInt("Enter new Age: ");
+                    break;
+                case 4:
+                   person.Address = InputValidator.ReadString("Enter new Address: ");
+                    break;
+                case 5:
+                    person.PhoneNumber = InputValidator.ReadString("Enter new PhoneNumber: ");
+                    break;
+                case 6:
+                    person.WorkingHours = InputValidator.ReadDecimal("Enter new Working Hours: ");
+                    break;
+                case 7:
+                    person.Shift = InputValidator.ReadString("Enter new Shift: ");
+                    break;
+                case 8:
+                    person.Wage = InputValidator.ReadDecimal("Enter new Wage: ");
+                    break;
+                default:
+                    Console.WriteLine("Invalid choice");
+                    break;
+            }
+        }
+        else
+        {
+            Console.WriteLine("Employee not found\n");
+            Console.WriteLine("==================================");
+        }
+        Console.WriteLine("====Employee info updated successfully.====");
+        SaveItemsToFile();
+    }
+
+
+    // print all employees info
+    public void printEmployees()
+    {
+            Console.WriteLine("+================Employees List========================");
+        // if list is empty display message
+        if (employees.Count == 0)
+        {
+            Console.WriteLine("No employees found.");
+        }
+        else
+        {
+            foreach (var item in employees)
+            {
+                item.displayInfo();
+            }
+        }
+            
+    }
 
         public void ManagerManagement()
     {
@@ -159,6 +210,7 @@ public class Manager : Employee
         bool continueRunning = true;
         while (continueRunning)
         {
+            Console.WriteLine("=========Employee Management=========");
             Console.WriteLine("1. Hire Employee");
             Console.WriteLine("2. Fire Employee ");
             Console.WriteLine("3. Update Employee info");
@@ -166,8 +218,7 @@ public class Manager : Employee
             Console.WriteLine("5. Exit");
             Console.Write(">> ");
             string option = Console.ReadLine();
-            Console.WriteLine("==================");
-
+            
             switch (option)
             {
                 case "1":
@@ -177,10 +228,9 @@ public class Manager : Employee
                     fire();
                     break;
                 case "3":
-                    // update employee by id 
+                    EditEmployeeInfo();
                     break;
                 case "4":
-                    
                     printEmployees();
                     break;
                 case "5":

@@ -172,7 +172,7 @@ public class Menu
         MenuItem item = menuItems.FirstOrDefault(x => x.FoodId == id);
         if (item != null)
         {
-            Console.WriteLine("what do you wish to edit ? " +
+            Console.WriteLine("what do you wish to edit ?\n" +
                 "1. Name\n" +
                 "2. Description\n" +
                 "3. Price\n" +

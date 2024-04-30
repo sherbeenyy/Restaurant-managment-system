@@ -161,6 +161,7 @@ public class Ordering : Menu
                 bool editing = true;
                 while (editing)
                 {
+                    Console.WriteLine("=======Edit menu=======");
                     Console.WriteLine("1. Add new item");
                     Console.WriteLine("2. Edit item quantity");
                     Console.WriteLine("3. Finish editing");

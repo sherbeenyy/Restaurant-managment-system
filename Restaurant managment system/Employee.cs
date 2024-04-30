@@ -43,8 +43,8 @@ public class Employee
     public void displayInfo()
     {
         Console.WriteLine("Employee ID: " + Id);
-        Console.WriteLine("Employee Role: " + Role);
         Console.WriteLine("Employee Name: " + Name);
+        Console.WriteLine("Employee Role: " + Role);
         Console.WriteLine("Employee Age: " + Age);
         Console.WriteLine("Employee Address: " + Address);
         Console.WriteLine("Employee Phone Number: " + PhoneNumber);

@@ -11,7 +11,7 @@ using System.ComponentModel.Design.Serialization;
 
 class Program
 {
-    public static bool login_toggler = true;
+    public static bool login_toggler = false;
 
     static void Main(string[] args)
     {

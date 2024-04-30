@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 public class Customer
 {
-    // from my understanding in order to save data from the method we have learened the class
+    // from my understanding in order to save data from the method we have learned the class
     // we are creating a list from needs to be sepreate as indvisuals 
     public class CustomerItem
     {
