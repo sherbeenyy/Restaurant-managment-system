@@ -30,7 +30,8 @@ public class DayInWeek
         foreach (var table in Tables)
         {
             string status = table.IsOccupied ? "Occupied" : table.IsReserved ? "Reserved" : "Available";
-            Console.WriteLine($"Table Number: {table.TableNumber}, Status: {status}");
+            string customerName = string.IsNullOrEmpty(table.Name) ? "No one" : table.Name;
+            Console.WriteLine($"Table Number: {table.TableNumber}, Status: {status}, Customer: {customerName}");
         }
     }
 }
@@ -42,6 +43,7 @@ public class Table
     public bool IsReserved { get; set; }
     public bool IsOccupied { get; set; }
 
+    public string Name { get; set; }
     public Table(int tableNumber)
     {
         TableNumber = tableNumber;
@@ -54,7 +56,7 @@ public class Table
 
 // main class for the reservation system
 
-public class Reservations
+public class Reservations : Customer
     {
     private string Name { get; set; }
     private string PhoneNumber { get; set; }
@@ -165,7 +167,12 @@ public class Reservations
             else
             {
                 table.IsReserved = true;
-                Console.WriteLine("Table reserved successfully.");
+                Console.WriteLine($"Please enter customer Namw:");
+                string name = Console.ReadLine();
+                table.Name = name;
+                Console.WriteLine($"Table {tableNumber} reserved successfully.");
+
+
                 SaveItemsToFile();
             }
         }
