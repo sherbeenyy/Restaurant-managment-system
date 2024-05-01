@@ -158,7 +158,7 @@ public void Displayall()
     {
         foreach (var person in customers)
         {
-            Console.WriteLine($"Name: {person.Name}, Phone Number: {person.PhoneNumber}, Address: {person.Address}, Loyalty Points: {person.LoyaltyPoints}");
+            Console.WriteLine($"Name: {person.Name}\nPhone Number: {person.PhoneNumber}\nAddress: {person.Address}\nLoyalty Points: {person.LoyaltyPoints}");
         }
     }
     else
