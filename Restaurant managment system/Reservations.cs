@@ -84,32 +84,17 @@ public class Reservations : Customer
     // only owner can do this 
     public void InitDaysAndTables()
     {
-        Console.WriteLine("Enter the number of days in the week your restaurant will be open:");
-        if (!int.TryParse(Console.ReadLine(), out int daysCount) || daysCount <= 0)
-        {
-            Console.WriteLine("Invalid input. Please enter a valid number of days.");
-            return;
-        }
+        int daysCount = InputValidator.ReadInt("Enter the number of days in the week: ");
 
         for (int i = 0; i < daysCount; i++)
         {
-            Console.WriteLine("Enter the day name:");
-            string dayName = Console.ReadLine();
-            if (string.IsNullOrWhiteSpace(dayName))
-            {
-                Console.WriteLine("Invalid day name. Please enter a valid name.");
-                continue;
-            }
+            
+            string dayName = InputValidator.ReadString("Enter the day name: ");
 
             var day = new DayInWeek(dayName);
             days.Add(day);
 
-            Console.WriteLine($"Enter the number of tables for {dayName}:");
-            if (!int.TryParse(Console.ReadLine(), out int tableCount) || tableCount <= 0)
-            {
-                Console.WriteLine("Invalid number of tables. Please enter a valid number.");
-                continue;
-            }
+            int tableCount = InputValidator.ReadInt("Enter the number of tables for this day: ");
 
             for (int j = 0; j < tableCount; j++)
             {
@@ -122,8 +107,9 @@ public class Reservations : Customer
     // Display tables for a specific day
     public void DisplayTables()
     {
-        Console.WriteLine("Enter the day to display tables:");
-        string dayName = Console.ReadLine();
+        
+        string dayName = InputValidator.ReadString("Enter the day name: ");
+
         var day = days.FirstOrDefault(d => d.DayName.Equals(dayName, StringComparison.OrdinalIgnoreCase));
         if (day == null)
         {
@@ -135,8 +121,9 @@ public class Reservations : Customer
 
     public void ReserveOrCancelTable(bool isReserve)
     {
-        Console.WriteLine("Enter the day:");
-        string dayName = Console.ReadLine();
+        
+        string dayName = InputValidator.ReadString("Enter the day name: ");
+
         var day = days.FirstOrDefault(d => d.DayName.Equals(dayName, StringComparison.OrdinalIgnoreCase));
         if (day == null)
         {
@@ -144,12 +131,7 @@ public class Reservations : Customer
             return;
         }
 
-        Console.WriteLine("Enter the table number:");
-        if (!int.TryParse(Console.ReadLine(), out int tableNumber))
-        {
-            Console.WriteLine("Invalid input. Please enter a valid table number.");
-            return;
-        }
+        int tableNumber = InputValidator.ReadInt("Enter the table number: ");
 
         var table = day.Tables.FirstOrDefault(t => t.TableNumber == tableNumber);
         if (table == null)
@@ -167,8 +149,9 @@ public class Reservations : Customer
             else
             {
                 table.IsReserved = true;
-                Console.WriteLine($"Please enter customer Namw:");
+                Console.WriteLine($"Please enter customer Name:");
                 string name = Console.ReadLine();
+
                 table.Name = name;
                 Console.WriteLine($"Table {tableNumber} reserved successfully.");
 
@@ -231,6 +214,7 @@ public class Reservations : Customer
             }
         }
     }
+
     // file handeling 
 
     private const string path = "Reservations.json";

@@ -18,7 +18,9 @@ public static class InputValidator
         Console.Write(prompt);
         while (!int.TryParse(Console.ReadLine(), out output))
         {
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Invalid input, please enter a valid integer.");
+            Console.ResetColor();
             Console.Write(prompt);
         }
         return output;
@@ -30,7 +32,9 @@ public static class InputValidator
         Console.Write(prompt);
         while (!decimal.TryParse(Console.ReadLine(), out output))
         {
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Invalid input, please enter a valid decimal.");
+            Console.ResetColor();
             Console.Write(prompt);
         }
         return output;

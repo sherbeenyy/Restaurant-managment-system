@@ -1,9 +1,12 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using static Ordering;
 
 /*Function that make remove order, ask for customer info,if info does not exist create customer info finally use the small percentage of subtotal and added to customer
  loyalty points */
+
 
 public class Ordering : Menu
 {
@@ -18,7 +21,6 @@ public class Ordering : Menu
 
     // Initialize the OrderItems list
     protected List<OrderItem> OrderItems = new List<OrderItem>();
-
 
     public Ordering(int orderID, int receipt, int taxRate, int serviceCharge, DateTime orderDate,decimal subtotal)
     {
@@ -149,8 +151,8 @@ public class Ordering : Menu
 
     private void EditExistingOrder() //  to modify specific order
     {
-        ViewOrders(); // Display all orders for user to choose from
         Console.WriteLine("Enter the Order ID you want to edit:"); // we enter the order id not item id
+        ViewOrders(); // Display all orders for user to choose from
         if (int.TryParse(Console.ReadLine(), out int orderId))
         {
             var order = allOrders.FirstOrDefault(o => o.OrderID == orderId);// it search for the order id that we entered
@@ -276,11 +278,24 @@ public class Ordering : Menu
                         Console.WriteLine($"Item ID {item.ItemId} not found in menu.");
                     }
                 }
+                Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine($"Subtotal for this Order: {order.Subtotal}");
                 Console.WriteLine($"Service Charge: {ServiceCharge}");
                 Console.WriteLine($"Tax Rate: {TaxRate}%");
                 Console.WriteLine($"Total Cost: {order.Subtotal + ServiceCharge + (order.Subtotal * TaxRate / 100)}");
+                Console.ResetColor();
+                Console.WriteLine("=============");
+                Console.WriteLine("do you wish to pay for an order? ");
+                string choice = Console.ReadLine();
+                if (choice.ToLower() == "yes")
+                {
+                    PayOrder(orderId);
                 }
+                else
+                {
+
+                }
+            }
             else
             {
                 Console.WriteLine("Order ID not found.");
@@ -300,19 +315,93 @@ public class Ordering : Menu
             Console.WriteLine("There are no orders to display.");
             return;
         }
-
         foreach (var order in allOrders)
         {
             order.DisplayOrders();
             Console.WriteLine(); // Adds a line for better readability between orders
         }
     }
+
+    // function to remove order by paying for it 
+    public void PayOrder(int orderId)
+    {
+        var order = allOrders.FirstOrDefault(o => o.OrderID == orderId);
+        if (order == null)
+        {
+            Console.WriteLine("Order not found.");
+            return;
+        }
+
+        Console.Write("Enter customer phone number: ");
+        string phoneNumber = Console.ReadLine();
+        LoadCustomerData();  // Load customer data from file
+
+        var customer = customers.FirstOrDefault(c => c.PhoneNumber == phoneNumber);
+
+        if (customer == null)
+        {
+            Console.WriteLine("Customer not found, creating new customer.");
+            customer = CreateNewCustomer(phoneNumber);
+            customers.Add(customer);
+        }
+
+        // Process payment
+        decimal loyaltyPointsToAdd = order.Subtotal * 0.05m;  // 5% of subtotal added to loyalty points
+        customer.LoyaltyPoints += (int)loyaltyPointsToAdd;
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine($"Payment processed. {loyaltyPointsToAdd} loyalty points added. Total Loyalty Points: {customer.LoyaltyPoints}");
+        Console.ResetColor();
+
+        SaveCustomerData();  // Save updated customer data
+    }
+
+
+    private Customer.CustomerItem CreateNewCustomer(string phoneNumber)
+    {
+        Console.WriteLine("Enter customer name: ");
+        string name = Console.ReadLine();
+        Console.WriteLine("Enter customer address: ");
+        string address = Console.ReadLine();
+
+        return new Customer.CustomerItem(name, phoneNumber, address);
+    }
+
+
+
+    // Customer file handling usesd here to let class ordering accses the customer file
+    private const string customerFilePath = "Customers.json";  
+
+    private List<Customer.CustomerItem> customers;
+
+    private void LoadCustomerData()
+    {
+        if (File.Exists(customerFilePath))
+        {
+            string json = File.ReadAllText(customerFilePath);
+            customers = JsonConvert.DeserializeObject<List<Customer.CustomerItem>>(json) ?? new List<Customer.CustomerItem>();
+        }
+        else
+        {
+            customers = new List<Customer.CustomerItem>();
+        }
+    }
+
+    private void SaveCustomerData()
+    {
+        string json = JsonConvert.SerializeObject(customers, Formatting.Indented);
+        File.WriteAllText(customerFilePath, json);
+    }
+
+
+
     public void OrderingManagement()
     {
         LoadItemsFromFile();
         bool continueRunning = true;
         while (continueRunning)
         {
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("============ ORDER PLACEMENT ========");
             Console.WriteLine("1. View Menu");
             Console.WriteLine("2. Create Order");
@@ -320,6 +409,7 @@ public class Ordering : Menu
             Console.WriteLine("4. Print Receipt");
             Console.WriteLine("5. View All Orders");
             Console.WriteLine("6. Exit");
+            Console.ResetColor();
 
             string option = Console.ReadLine();
             switch (option)
@@ -334,7 +424,7 @@ public class Ordering : Menu
                     EditExistingOrder();
                     break;
                 case "4":
-                    PrintOrderDetails(); // Ensure this function prints details of all orders or let user select an order
+                    PrintOrderDetails();// Ensure this function prints details of all orders or let user select an order
                     break;
                 case "5":
                     ViewOrders();
@@ -348,7 +438,4 @@ public class Ordering : Menu
             }
         }
     }
-
-   
-
 }

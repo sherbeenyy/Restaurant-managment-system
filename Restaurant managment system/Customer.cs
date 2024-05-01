@@ -112,7 +112,7 @@ public class Customer
                 "3. Address\n");
             Console.Write(">>");
 
-            int choice = Convert.ToInt32(Console.ReadLine());
+            int choice = InputValidator.ReadInt("Enter your choice: ");
             switch (choice)
             {
                 case 1:
