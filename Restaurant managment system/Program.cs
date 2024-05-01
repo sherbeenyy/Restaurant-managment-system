@@ -155,10 +155,12 @@ class Program
                 {
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine("=======Restaurant Functions=========");
-                    Console.WriteLine("1. Manage Menu");
-                    Console.WriteLine("2. Manage Customers");
-                    Console.WriteLine("3. Manage Orders");
-                    Console.WriteLine("4. Manage Employees");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("1. Manage Employees");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("2. Manage Menu");
+                    Console.WriteLine("3. Manage Customers");
+                    Console.WriteLine("4. Manage Orders");
                     Console.WriteLine("5. Manage Reservations");
                     Console.WriteLine("6. Exit");
                     Console.ResetColor();
@@ -173,20 +175,19 @@ class Program
 
                     switch (choice)
                     {
+
                         case 1:
-                            menu.MenuManagement();
+                        manager.ManagerManagement();
                             break;
                         case 2:
-                            customer.CustomerManagement();
+                        menu.MenuManagement();
                             break;
                         case 3:
-                            order.OrderingManagement();
-                            // Placeholder for placing an order
-                            //Console.WriteLine("Order placement not yet implemented.\n");
+                        customer.CustomerManagement();
                             break;
                         case 4:
-                            manager.ManagerManagement();
-                            break;
+                        order.OrderingManagement();
+                        break;
                         case 5:
                             resreve.reservationManagment();
                             break;
