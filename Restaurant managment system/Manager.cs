@@ -98,7 +98,7 @@ public class Manager : Employee
             Employee item = employees.FirstOrDefault(x => x.Id == id);
             if (item != null)
             {
-                Console.WriteLine("are you sure yoy wish to remove Employee" + item.Name);
+                Console.WriteLine("are you sure yoy wish to remove Employee " + item.Name);
                 string answer = Console.ReadLine();
                 if (answer == "yes")
                 {
