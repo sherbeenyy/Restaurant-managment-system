@@ -10,6 +10,8 @@ using static Ordering;
 
 public class Ordering : Menu
 {
+    
+
     // variables for Ordering 
     public int OrderID { get; set; }
     public int Receipt { get; set; }
@@ -34,6 +36,8 @@ public class Ordering : Menu
 
     public Ordering()
     {
+        LoadItemsFromFile();
+        InventoryManager.InitializeInventory();
     }
 
 
@@ -77,6 +81,7 @@ public class Ordering : Menu
             OrderItems.Add(item);
             CalculateSubtotal();
         }
+
         public void CalculateSubtotal()
         {
             Subtotal = OrderItems.Sum(item =>
@@ -86,7 +91,40 @@ public class Ordering : Menu
             });
         }
 
-// display the orders method
+
+        // for updating the inventory
+        public void ProcessOrder()
+        {
+            foreach (var orderItem in OrderItems)
+            {
+                var menuItem = menuItems.FirstOrDefault(m => m.FoodId == orderItem.ItemId);
+                if (menuItem != null)
+                {
+                    foreach (var ingredient in menuItem.IngredientsRequired)
+                    {
+                        InventoryManager.UpdateInventory(ingredient.Key, -ingredient.Value * orderItem.Quantity);
+                    }
+                }
+            }
+        }
+
+
+        // function to be used in the real cancel order
+        public void CancelOrder()
+        {
+            foreach (var orderItem in OrderItems)
+            {
+                var menuItem = menuItems.FirstOrDefault(m => m.FoodId == orderItem.ItemId);
+                if (menuItem != null)
+                {
+                    foreach (var ingredient in menuItem.IngredientsRequired)
+                    {
+                        InventoryManager.UpdateInventory(ingredient.Key, ingredient.Value * orderItem.Quantity);
+                    }
+                }
+            }
+        }
+
         public void DisplayOrders()
         {
             Console.WriteLine($"Order ID: {OrderID}");
@@ -105,13 +143,13 @@ public class Ordering : Menu
             }
             Console.WriteLine($"Subtotal for this Order: {Subtotal}");
         }
+
     }
-    
+
     public void AddOrderItem()
     {
         int orderId = nextOrderId++;
-        OrderList newOrder = new OrderList(orderId,menuItems);
-
+        OrderList newOrder = new OrderList(orderId, menuItems);
         allOrders.Add(newOrder);
 
         Console.WriteLine("Enter item IDs and quantities (type 'done' to finish):");
@@ -129,8 +167,15 @@ public class Ordering : Menu
                     Console.Write("Enter Quantity of item: ");
                     if (int.TryParse(Console.ReadLine(), out int quantity))
                     {
-                        newOrder.AddItem(new OrderItem(itemId, quantity));
+                        var orderItem = new OrderItem(itemId, quantity);
+                        newOrder.AddItem(orderItem);
                         Console.WriteLine("Item added.");
+
+                        // Update inventory for each added item
+                        foreach (var ingredient in menuItem.IngredientsRequired)
+                        {
+                            InventoryManager.UpdateInventory(ingredient.Key, -ingredient.Value * quantity);
+                        }
                     }
                     else
                     {
@@ -394,25 +439,44 @@ public class Ordering : Menu
     }
 
 
+    public void CancelOrder()
+    {
+        Console.WriteLine("Enter the Order ID you want to cancel:");
+        ViewOrders(); // Display all orders for user to choose from
+        int orderId = InputValidator.ReadInt("Enter the order ID you want to cancel: ");
+
+        var order = allOrders.FirstOrDefault(o => o.OrderID == orderId);
+        if (order != null)
+        {
+            order.CancelOrder(); // Ensure this method exists to handle the logic
+            allOrders.Remove(order);
+            Console.WriteLine("Order cancelled and inventory updated.");
+        }
+        else
+        {
+            Console.WriteLine("Order ID not found.");
+        }
+    }
+
+
 
     public void OrderingManagement()
     {
-        LoadItemsFromFile();
         bool continueRunning = true;
         while (continueRunning)
         {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("============ ORDER PLACEMENT ========");
+            Console.WriteLine("============ ORDER MANAGEMENT ========");
             Console.WriteLine("1. View Menu");
             Console.WriteLine("2. Create Order");
             Console.WriteLine("3. Edit Existing Order");
-            Console.WriteLine("4. Print Receipt");
-            Console.WriteLine("5. View All Orders");
-            Console.WriteLine("6. Exit");
-            Console.ResetColor();
+            Console.WriteLine("4. Cancel Order");
+            Console.WriteLine("5. Print Receipt");
+            Console.WriteLine("6. View All Orders");
+            Console.WriteLine("7. Exit");
+            Console.Write("Enter your choice: ");
 
-            string option = Console.ReadLine();
-            switch (option)
+            string choice = Console.ReadLine();
+            switch (choice)
             {
                 case "1":
                     ViewItems();
@@ -424,13 +488,16 @@ public class Ordering : Menu
                     EditExistingOrder();
                     break;
                 case "4":
-                    PrintOrderDetails();// Ensure this function prints details of all orders or let user select an order
+                    CancelOrder();
                     break;
                 case "5":
-                    ViewOrders();
+                    PrintOrderDetails();
                     break;
                 case "6":
-                    continueRunning = false; // Exit the loop
+                    ViewOrders();
+                    break;
+                case "7":
+                    continueRunning = false;
                     break;
                 default:
                     Console.WriteLine("Invalid option, please try again.");

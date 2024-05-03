@@ -11,13 +11,13 @@ using Newtonsoft.Json;
     [Serializable]
 
 public class MenuItem
-
 {
     public string FoodName { get; set; }
     public string FoodDescription { get; set; }
     public decimal FoodPrice { get; set; }
     public string FoodCategory { get; set; }
-    public int FoodId { get; set; } // Add a unique id for each item
+    public int FoodId { get; set; }
+    public Dictionary<string, double> IngredientsRequired { get; set; } // New property
 
     public MenuItem(string foodName, string foodDescription, decimal foodPrice, string foodCategory, int foodId)
     {
@@ -26,7 +26,22 @@ public class MenuItem
         FoodPrice = foodPrice;
         FoodCategory = foodCategory;
         FoodId = foodId;
+        IngredientsRequired = new Dictionary<string, double>();
     }
+
+    // Example method to add ingredients to the menu item
+    public void AddIngredient(string ingredientName, double quantity)
+    {
+        if (IngredientsRequired.ContainsKey(ingredientName))
+        {
+            IngredientsRequired[ingredientName] += quantity;  // Update quantity if already exists
+        }
+        else
+        {
+            IngredientsRequired.Add(ingredientName, quantity); // Add new ingredient if not exists
+        }
+    }
+
 }
 
 public class Menu
@@ -34,6 +49,7 @@ public class Menu
    public List<MenuItem> menuItems = new List<MenuItem>(); // create a list of menu items named menuItems
 
 // testing in the main function
+
    public void MenuManagement()
 {
     LoadItemsFromFile();  // Load items when the program starts
@@ -85,49 +101,46 @@ public class Menu
     public void AddNewItem()
     {
         Console.WriteLine("=========Creating New Item============");
-
-         string name = InputValidator.ReadString("Enter item name: ");
-
+        string name = InputValidator.ReadString("Enter item name: ");
         string description = InputValidator.ReadString("Enter item description: ");
-       
         decimal price = InputValidator.ReadDecimal("Enter item price: ");
-
         string category = InputValidator.ReadString("Enter item category: ");
-
-        // Ask the user for a unique id for the item
 
         bool isUnique = false;
         int foodId;
         do
         {
             foodId = InputValidator.ReadInt("Enter a unique ID for the item: ");
-
-            // Check if the foodId is unique
-
             isUnique = !menuItems.Any(x => x.FoodId == foodId);
             if (!isUnique)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"An item with ID {foodId} already exists.");
-                Console.ResetColor();
-                Console.WriteLine("Please enter a different ID;");
+                Console.WriteLine($"An item with ID {foodId} already exists. Please enter a different ID;");
             }
         } while (!isUnique);
 
-        // Create a new MenuItem object with the user input
+        var newItem = new MenuItem(name, description, price, category, foodId);
 
-        var newItem = new MenuItem(name, description, price, category,foodId);
+        bool addingIngredients = true;
+        Console.WriteLine("Enter ingredients (type 'done' when finished):");
+        while (addingIngredients)
+        {
+            string ingredientName = InputValidator.ReadString("Enter ingredient name: ");
+            if (ingredientName.ToLower() == "done")
+            {
+                addingIngredients = false;
+                continue;
+            }
+            double quantity = InputValidator.ReadDouble("Enter quantity required: "); // Assuming this method exists or you implement it similarly to ReadInt/ReadDecimal
+            newItem.AddIngredient(ingredientName, quantity);
+            // Here you would update inventory, if this ingredient addition should affect inventory
+            InventoryManager.AddInventoryItem(ingredientName, quantity, 10); // Assuming default low threshold
+        }
 
-        // Add the new item to the list
-
-        Createitem(newItem);// .add is a built in function in list to add new items 
+        menuItems.Add(newItem);
         SaveItemsToFile();
-
-        Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine("\nNew item added successfully.\n");
-        Console.ResetColor();
-
+        Console.WriteLine("New item added successfully.\n");
     }
+
 
     public void Createitem(MenuItem item)
     {
@@ -160,57 +173,66 @@ public class Menu
     // edit item by id
     public void EditItem()
     {
-       int id = InputValidator.ReadInt("Enter the ID of the item you want to edit: ");
-
-        // Find item by id and edit it
+        int id = InputValidator.ReadInt("Enter the ID of the item you want to edit: ");
         MenuItem item = menuItems.FirstOrDefault(x => x.FoodId == id);
         if (item != null)
         {
-            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("=======Editing Item========");
-            Console.WriteLine("what do you wish to edit ?\n" +
-                "1. Name\n" +
-                "2. Description\n" +
-                "3. Price\n" +
-                "4. Category\n" +
-                "5. All");
-            Console.ResetColor();
-            Console.Write(">>");
+            Console.WriteLine("What do you wish to edit?\n1. Name\n2. Description\n3. Price\n4. Category\n5. Ingredients\n6. All");
             int choice = InputValidator.ReadInt("Enter your choice: ");
             switch (choice)
             {
                 case 1:
-                    Console.WriteLine("Enter new name: ");
-                    item.FoodName = Console.ReadLine();
+                    item.FoodName = InputValidator.ReadString("Enter new name: ");
                     break;
                 case 2:
-                   item.FoodDescription = InputValidator.ReadString("Enter new description: ");
+                    item.FoodDescription = InputValidator.ReadString("Enter new description: ");
                     break;
                 case 3:
                     item.FoodPrice = InputValidator.ReadDecimal("Enter new price: ");
                     break;
                 case 4:
-                   item.FoodCategory = InputValidator.ReadString("Enter new category: ");
+                    item.FoodCategory = InputValidator.ReadString("Enter new category: ");
                     break;
                 case 5:
+                    EditIngredients(item);
+                    break;
+                case 6:
                     EditAll(item);
                     break;
                 default:
-                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Invalid choice");
-                    Console.ResetColor();
                     break;
             }
-            
+            SaveItemsToFile();
         }
         else
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Item not found\n");
-            Console.ResetColor();
+            Console.WriteLine("Item not found");
         }
-        SaveItemsToFile();
     }
+
+    private void EditIngredients(MenuItem item)
+    {
+        Console.WriteLine("Editing Ingredients (type 'done' to finish):");
+        item.IngredientsRequired.Clear(); // Clear existing ingredients or manage them differently
+        bool editingIngredients = true;
+        while (editingIngredients)
+        {
+            string ingredientName = InputValidator.ReadString("Enter ingredient name or 'done': ");
+            if (ingredientName.ToLower() == "done")
+            {
+                editingIngredients = false;
+                continue;
+            }
+            double quantity = InputValidator.ReadDouble("Enter quantity required: ");
+            item.AddIngredient(ingredientName, quantity);
+            // Here you would update inventory, if this ingredient addition should affect inventory
+            InventoryManager.AddInventoryItem(ingredientName, quantity, 10); // Assuming default low threshold
+
+        }
+    }
+
 
     private void EditAll(MenuItem item)
     {

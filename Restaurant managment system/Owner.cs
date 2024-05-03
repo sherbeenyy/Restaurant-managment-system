@@ -88,6 +88,29 @@ using System.Threading.Tasks;
         return false;
     }
 
+    // add staff credentials
+
+    public void CreateStaffCredentials()
+    {
+        Console.WriteLine("Creating new staff credentials:");
+        Console.Write("Enter staff username: ");
+        string username = Console.ReadLine();
+        Console.Write("Enter staff password: ");
+        string password = Console.ReadLine();
+
+        Credentials credentials = new Credentials { Username = username };
+        credentials.SetPassword(password);  // Hash the password
+
+        SaveCredentials(credentials, "staff_credentials.json");  // Save the hashed password to a specific staff file
+        Console.WriteLine("Staff credentials created and saved securely.");
+    }
+
+    private void SaveCredentials(Credentials credentials, string filePath)
+    {
+        string json = JsonConvert.SerializeObject(credentials, Formatting.Indented);
+        File.WriteAllText(filePath, json);
+    }
+
 }
 
 

@@ -51,4 +51,16 @@ public static class InputValidator
         }
         return output;
     }
+
+    public static double ReadDouble(string prompt)
+    {
+        double output;
+        Console.Write(prompt);
+        while (!double.TryParse(Console.ReadLine(), out output))
+        {
+            Console.WriteLine("Invalid input, please enter a valid double.");
+            Console.Write(prompt);
+        }
+        return output;
+    }
 }
